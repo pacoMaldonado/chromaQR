@@ -1,7 +1,7 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "ChromaQR",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "identifier": "com.chromaqr.desktop",
   "build": {
     "beforeDevCommand": "npm run dev",
@@ -26,7 +26,7 @@
       }
     ],
     "security": {
-      "csp": "default-src 'self'; img-src 'self' data: blob: https: http:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; connect-src 'self' ipc: http://ipc.localhost"
+      "csp": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https: http:; font-src 'self' data:; connect-src 'self' ipc: http://ipc.localhost; object-src 'none'; base-uri 'self'"
     }
   },
   "bundle": {
@@ -41,6 +41,18 @@
     ],
     "category": "DeveloperTool",
     "shortDescription": "Fast, lightweight cross-platform QR Code Generator & Designer",
-    "longDescription": "ChromaQR is a high-performance desktop QR code studio built with Tauri v2 and Astro, featuring real-time 60fps preview, WCAG contrast scannability validation, custom gradients, embedded logos, and multi-format export."
+    "longDescription": "ChromaQR is a high-performance desktop QR code studio built with Tauri v2 and Astro, featuring real-time 60fps preview, WCAG contrast scannability validation, custom gradients, embedded logos, and multi-format export.",
+    "linux": {
+      "deb": {
+        "files": {
+          "/usr/share/metainfo/com.chromaqr.desktop.metainfo.xml": "../packaging/linux/com.chromaqr.desktop.metainfo.xml"
+        }
+      },
+      "rpm": {
+        "files": {
+          "/usr/share/metainfo/com.chromaqr.desktop.metainfo.xml": "../packaging/linux/com.chromaqr.desktop.metainfo.xml"
+        }
+      }
+    }
   }
 }

@@ -11,6 +11,22 @@ y este proyecto se adhiere a [Semantic Versioning (SemVer)](https://semver.org/l
 
 ---
 
+## [0.0.4] - 2026-11-16
+
+### Security (Endurecimiento Zero-Trust y Aislamiento)
+- **Eliminación de Escritura Arbitraria en Backend Rust (`src-tauri/src/commands.rs`, `src/core/qr/exporter.ts`):** Eliminado el comando IPC `save_binary_file`. Ahora la exportación de archivos utiliza única y exclusivamente el alcance dinámico autorizado en memoria por la ventana nativa de guardado (`dialog:allow-save` + `fs:allow-write-file`), impidiendo escribir en cualquier ruta que el usuario no haya elegido explícitamente.
+- **Recorte Quirúrgico de Capabilities ACL (`src-tauri/capabilities/default.json`):**
+  - Eliminados los conjuntos globales `dialog:default`, `fs:default`, `clipboard-manager:default`, `dialog:allow-open` y `fs:allow-read-file`.
+  - Restringido el portapapeles exclusivamente a escritura de imágenes (`clipboard-manager:allow-write-image`), bloqueando la lectura del portapapeles del sistema.
+  - Restringido el acceso a archivos locales únicamente al archivo de plantillas en `$APPDATA` (`fs:scope-appdata-recursive`).
+- **Endurecimiento de Content Security Policy (`src-tauri/tauri.conf.json`):** Añadidas directivas explícitas `script-src 'self'; object-src 'none'; base-uri 'self'` y bloqueo de conexiones externas (`connect-src 'self' ipc: http://ipc.localhost`).
+
+### Added (Empaquetado y Aislamiento en Linux)
+- **Metadatos Freedesktop AppStream (`packaging/linux/com.chromaqr.desktop.metainfo.xml`):** Embebidos en `/usr/share/metainfo/` dentro de los paquetes `.rpm` y `.deb` para certificar licencia libre MIT y clasificación OARS-1.1 ante KDE Discover y GNOME Software.
+- **Manifiesto Flatpak y Lanzador Bubblewrap (`packaging/linux/`):** Incluidos `com.chromaqr.desktop.flatpak.yml` y `chromaqr-sandboxed.sh` con aislamiento a nivel de kernel (`--unshare-net` y sin acceso al directorio personal salvo `$APPDATA` y Descargas).
+
+---
+
 ## [0.0.3] - 2026-11-16
 
 ### Fixed (Correcciones)

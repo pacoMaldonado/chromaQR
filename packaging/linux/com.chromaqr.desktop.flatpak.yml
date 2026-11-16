@@ -1,0 +1,24 @@
+app-id: com.chromaqr.desktop
+runtime: org.gnome.Platform
+runtime-version: '47'
+sdk: org.gnome.Sdk
+command: chromaqr
+
+finish-args:
+  # Display & GPU acceleration only
+  - --socket=wayland
+  - --socket=fallback-x11
+  - --share=ipc
+  - --device=dri
+  # Zero network access & zero host filesystem access:
+  # File saving is handled strictly through XDG Desktop Portal (org.freedesktop.portal.FileChooser)
+
+modules:
+  - name: chromaqr
+    buildsystem: simple
+    build-commands:
+      - install -Dm755 chromaqr /app/bin/chromaqr
+      - install -Dm644 com.chromaqr.desktop.metainfo.xml /app/share/metainfo/com.chromaqr.desktop.metainfo.xml
+    sources:
+      - type: file
+        path: com.chromaqr.desktop.metainfo.xml
