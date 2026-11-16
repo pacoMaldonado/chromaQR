@@ -1,0 +1,91 @@
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/500.css';
+@import '@fontsource/inter/600.css';
+@import '@fontsource/jetbrains-mono/400.css';
+@import '@fontsource/jetbrains-mono/500.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-primary: #09090B;
+  --bg-surface: #121215;
+  --bg-elevated: #18181B;
+  --bg-active: #27272A;
+
+  --border-subtle: #27272A;
+  --border-focus: #6366F1;
+
+  --accent-primary: #6366F1;
+  --accent-primary-hover: #4F46E5;
+  --status-success: #10B981;
+  --status-warning: #F59E0B;
+  --status-error: #EF4444;
+
+  --text-primary: #FAFAFA;
+  --text-secondary: #A1A1AA;
+  --text-muted: #71717A;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+input,
+textarea,
+code,
+pre,
+[data-selectable="true"] {
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Inter', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom subtle scrollbars for internal panels */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #27272A;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3F3F46;
+}
+
+/* Subtle checkerboard background for transparent QR preview */
+.bg-checkerboard {
+  background-color: #121215;
+  background-image: 
+    linear-gradient(45deg, #18181B 25%, transparent 25%), 
+    linear-gradient(-45deg, #18181B 25%, transparent 25%), 
+    linear-gradient(45deg, transparent 75%, #18181B 75%), 
+    linear-gradient(-45deg, transparent 75%, #18181B 75%);
+  background-size: 16px 16px;
+  background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+}

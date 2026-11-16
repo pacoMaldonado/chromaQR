@@ -1,0 +1,48 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import { QrCode, Sparkles, ShieldCheck } from 'lucide-astro';
+---
+
+<MainLayout title="ChromaQR — Generador y Diseñador QR">
+  <main class="flex-1 flex h-full w-full overflow-hidden">
+    <!-- Left Column: Configuration Panel (60%) -->
+    <section class="w-[60%] h-full border-r border-app-border bg-app-bg flex flex-col overflow-hidden">
+      <header class="h-14 px-5 border-b border-app-border bg-app-surface flex items-center justify-between shrink-0">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-app-accent/15 border border-app-accent/40 flex items-center justify-center text-app-accent">
+            <QrCode class="w-4 h-4" />
+          </div>
+          <div>
+            <h1 class="text-sm font-semibold tracking-tight text-app-text leading-none">ChromaQR</h1>
+            <p class="text-[11px] font-mono text-app-muted mt-0.5">v0.1.0 · Hito 1 Base Ready</p>
+          </div>
+        </div>
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-app-elevated border border-app-border text-app-muted">
+          <Sparkles class="w-3.5 h-3.5 text-app-accent" />
+          Tauri v2 + Astro Static
+        </span>
+      </header>
+
+      <div class="flex-1 overflow-y-auto p-6 space-y-4">
+        <div class="p-5 rounded-xl bg-app-surface border border-app-border">
+          <h2 class="text-xs font-semibold uppercase tracking-wider text-app-muted mb-2">Estado de Inicialización</h2>
+          <p class="text-sm text-app-text">
+            Entorno base configurado con Astro (Static SPA), Tailwind CSS, fuentes locales Inter &amp; JetBrains Mono, iconografía Lucide y runtime nativo Tauri v2.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Right Column: Live Preview & Export (40%) -->
+    <aside class="w-[40%] h-full bg-app-surface/60 flex flex-col items-center justify-center p-6">
+      <div class="w-64 h-64 rounded-2xl border border-app-border bg-checkerboard shadow-panel flex flex-col items-center justify-center gap-3 p-6 text-center">
+        <QrCode class="w-16 h-16 text-app-accent" />
+        <span class="font-mono text-xs text-app-muted">Lienzo 60fps listo</span>
+      </div>
+      <div class="mt-4 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-app-success/10 border border-app-success/30 text-app-success text-xs font-medium">
+        <ShieldCheck class="w-4 h-4" />
+        Sistema de Diseño Activo
+      </div>
+    </aside>
+  </main>
+</MainLayout>
