@@ -1,6 +1,6 @@
 [package]
 name = "chromaqr"
-version = "0.1.0"
+version = "0.0.2"
 description = "High-performance cross-platform desktop QR code generator and customizer"
 authors = ["Javier Maldonado Hernández"]
 license = "MIT"
@@ -13,13 +13,13 @@ name = "chromaqr_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
 
 [build-dependencies]
-tauri-build = { version = "2.0.0", features = [] }
+tauri-build = { version = "2", features = [] }
 
 [dependencies]
-tauri = { version = "2.0.0", features = [] }
-tauri-plugin-dialog = "2.0.0"
-tauri-plugin-fs = "2.0.0"
-tauri-plugin-clipboard-manager = "2.0.0"
+tauri = { version = "2", features = [] }
+tauri-plugin-dialog = "2"
+tauri-plugin-fs = "2"
+tauri-plugin-clipboard-manager = "2"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 

@@ -14,7 +14,7 @@ pub fn get_app_info() -> AppInfo {
     AppInfo {
         name: "ChromaQR",
         version: env!("CARGO_PKG_VERSION"),
-        identifier: "com.chromaqr.app",
+        identifier: "com.chromaqr.desktop",
     }
 }
 
