@@ -1,25 +1,17 @@
 {
   "$schema": "../gen/schemas/desktop-schema.json",
   "identifier": "default",
-  "description": "Strict minimal capabilities for ChromaQR desktop application (dialog, fs, clipboard-manager)",
+  "description": "Zero-Trust minimal capabilities for ChromaQR: write-only clipboard image, save-only file dialog, and isolated AppData presets",
   "windows": ["main"],
   "permissions": [
     "core:default",
-    "dialog:default",
     "dialog:allow-save",
-    "dialog:allow-open",
-    "fs:default",
     "fs:allow-write-file",
-    "fs:allow-read-file",
     "fs:allow-read-text-file",
     "fs:allow-write-text-file",
     "fs:allow-exists",
     "fs:allow-mkdir",
-    "fs:allow-appdata-read-recursive",
-    "fs:allow-appdata-write-recursive",
     "fs:scope-appdata-recursive",
-    "clipboard-manager:default",
-    "clipboard-manager:allow-write-image",
-    "clipboard-manager:allow-write-text"
+    "clipboard-manager:allow-write-image"
   ]
 }

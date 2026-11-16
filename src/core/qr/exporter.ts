@@ -1,4 +1,3 @@
-import { invoke } from '@tauri-apps/api/core';
 import { Image as TauriImage } from '@tauri-apps/api/image';
 import { writeImage } from '@tauri-apps/plugin-clipboard-manager';
 import { save } from '@tauri-apps/plugin-dialog';
@@ -168,16 +167,8 @@ export async function exportQrToFile(
         return; // User cancelled dialog
       }
 
-      try {
-        await writeFile(filePath, bytes);
-      } catch {
-        // Fallback to Rust IPC command if plugin-fs scope requires direct write
-        await invoke('save_binary_file', {
-          path: filePath,
-          bytes: Array.from(bytes),
-        });
-      }
-
+      // Write exclusively to the user-authorized path from the native Save dialog
+      await writeFile(filePath, bytes);
       showToast(`Exportado como ${format.toUpperCase()} correctamente`, 'success');
       return;
     }

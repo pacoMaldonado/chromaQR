@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>com.chromaqr.desktop</id>
+  <name>ChromaQR</name>
+  <summary>High-performance offline QR Code Generator and Designer</summary>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MIT</project_license>
+  <developer id="com.chromaqr">
+    <name>Javier Maldonado Hernández</name>
+  </developer>
+  <description>
+    <p>
+      ChromaQR is a fast, lightweight, 100% offline desktop application for generating, customizing, and validating QR codes with real-time 60fps preview and WCAG 2.1 contrast analysis.
+    </p>
+  </description>
+  <launchable type="desktop-id">com.chromaqr.desktop.desktop</launchable>
+  <url type="homepage">https://github.com/pacoMaldonado/chromaQR</url>
+  <url type="bugtracker">https://github.com/pacoMaldonado/chromaQR/issues</url>
+  <content_rating type="oars-1.1" />
+  <provides>
+    <binary>chromaqr</binary>
+  </provides>
+</component>

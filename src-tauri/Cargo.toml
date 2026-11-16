@@ -1,6 +1,6 @@
 [package]
 name = "chromaqr"
-version = "0.0.3"
+version = "0.0.4"
 description = "High-performance cross-platform desktop QR code generator and customizer"
 authors = ["Javier Maldonado Hernández"]
 license = "MIT"
