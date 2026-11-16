@@ -18,7 +18,8 @@ import Toast from '../components/ui/Toast.astro';
   <Toast />
 
   <script>
-    // Inicialización de interacciones base de UI (Acordeones, Sliders, ColorPickers y paneles condicionales)
+    import { initPayloadController } from '../core/payloads/payload-controller';
+
     function initBaseUiInteractions(): void {
       // 1. Accordions toggle behavior
       const triggers = document.querySelectorAll<HTMLButtonElement>('[data-accordion-trigger]');
@@ -96,6 +97,9 @@ import Toast from '../components/ui/Toast.astro';
       bindTogglePanel('bg-transparent-toggle', 'bg-color-controls', 'block', true);
     }
 
-    document.addEventListener('DOMContentLoaded', initBaseUiInteractions);
+    document.addEventListener('DOMContentLoaded', () => {
+      initBaseUiInteractions();
+      initPayloadController();
+    });
   </script>
 </MainLayout>

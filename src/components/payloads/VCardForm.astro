@@ -1,0 +1,124 @@
+---
+import Input from '../ui/Input.astro';
+import Select from '../ui/Select.astro';
+---
+
+<div data-payload-panel="vcard" class="hidden space-y-3">
+  <div class="grid grid-cols-3 gap-2.5">
+    <Input
+      id="vcard-first-name"
+      label="Nombre(s)"
+      placeholder="Javier"
+      value="Javier"
+      required={true}
+    />
+    <Input
+      id="vcard-last-name"
+      label="Apellidos"
+      placeholder="Maldonado"
+      value="Maldonado"
+      required={true}
+    />
+    <Select
+      id="vcard-version"
+      label="Estándar vCard"
+      value="3.0"
+      mono={true}
+      options={[
+        { value: '3.0', label: 'vCard 3.0 (Universal)' },
+        { value: '4.0', label: 'vCard 4.0 (RFC 6350)' },
+      ]}
+    />
+  </div>
+
+  <div class="grid grid-cols-2 gap-2.5">
+    <Input
+      id="vcard-org"
+      label="Organización / Empresa"
+      placeholder="ChromaQR Studio"
+      value="ChromaQR Studio"
+    />
+    <Input
+      id="vcard-title"
+      label="Puesto / Cargo"
+      placeholder="Principal Software Architect"
+      value="Principal Software Architect"
+    />
+  </div>
+
+  <div class="grid grid-cols-2 gap-2.5">
+    <Input
+      id="vcard-phone-mobile"
+      label="Teléfono Móvil"
+      type="tel"
+      placeholder="+52 55 1234 5678"
+      value="+52 55 1234 5678"
+      mono={true}
+    />
+    <Input
+      id="vcard-phone-work"
+      label="Teléfono Trabajo"
+      type="tel"
+      placeholder="+52 55 8765 4321"
+      value=""
+      mono={true}
+    />
+  </div>
+
+  <div class="grid grid-cols-2 gap-2.5">
+    <Input
+      id="vcard-email"
+      label="Correo Electrónico"
+      type="email"
+      placeholder="javier@chromaqr.app"
+      value="javier@chromaqr.app"
+      mono={true}
+    />
+    <Input
+      id="vcard-website"
+      label="Sitio Web"
+      type="url"
+      placeholder="https://chromaqr.app"
+      value="https://chromaqr.app"
+      mono={true}
+    />
+  </div>
+
+  <div class="grid grid-cols-3 gap-2.5">
+    <Input
+      id="vcard-street"
+      label="Calle y Número"
+      placeholder="Av. Reforma 222"
+      value="Av. Reforma 222"
+      class="col-span-2"
+    />
+    <Input
+      id="vcard-city"
+      label="Ciudad"
+      placeholder="Ciudad de México"
+      value="Ciudad de México"
+    />
+  </div>
+
+  <div class="grid grid-cols-3 gap-2.5">
+    <Input
+      id="vcard-state"
+      label="Estado / Provincia"
+      placeholder="CDMX"
+      value="CDMX"
+    />
+    <Input
+      id="vcard-zip"
+      label="Código Postal"
+      placeholder="06600"
+      value="06600"
+      mono={true}
+    />
+    <Input
+      id="vcard-country"
+      label="País"
+      placeholder="México"
+      value="México"
+    />
+  </div>
+</div>

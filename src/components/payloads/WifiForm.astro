@@ -1,0 +1,61 @@
+---
+import { Eye, EyeOff } from 'lucide-astro';
+import Input from '../ui/Input.astro';
+import Select from '../ui/Select.astro';
+import Toggle from '../ui/Toggle.astro';
+---
+
+<div data-payload-panel="wifi" class="hidden space-y-3">
+  <div class="grid grid-cols-2 gap-3">
+    <Input
+      id="wifi-ssid"
+      label="Nombre de Red (SSID)"
+      placeholder="ChromaQR_5G"
+      value="ChromaQR_5G"
+      mono={true}
+      required={true}
+    />
+
+    <Select
+      id="wifi-encryption"
+      label="Seguridad / Encriptación"
+      value="WPA"
+      options={[
+        { value: 'WPA', label: 'WPA / WPA2 / WPA3' },
+        { value: 'WEP', label: 'WEP (Legacy)' },
+        { value: 'nopass', label: 'Sin contraseña (Abierta)' },
+      ]}
+    />
+  </div>
+
+  <div id="wifi-password-wrapper" class="space-y-1.5">
+    <label for="wifi-password" class="block text-xs font-medium text-app-text">
+      Contraseña de la Red
+    </label>
+    <div class="relative flex items-center">
+      <input
+        id="wifi-password"
+        type="password"
+        value="SuperSecretPassword2026!"
+        placeholder="Contraseña Wi-Fi"
+        class="w-full h-9 pl-3 pr-9 rounded-lg bg-app-elevated border border-app-border font-mono text-xs text-app-text focus-ring"
+      />
+      <button
+        id="wifi-toggle-password"
+        type="button"
+        title="Mostrar / ocultar contraseña"
+        class="absolute right-2.5 text-app-muted hover:text-app-text transition-colors"
+      >
+        <Eye id="wifi-eye-open" class="w-4 h-4" />
+        <EyeOff id="wifi-eye-closed" class="w-4 h-4 hidden" />
+      </button>
+    </div>
+  </div>
+
+  <Toggle
+    id="wifi-hidden"
+    label="Red Wi-Fi Oculta (Hidden SSID)"
+    description="Activa este indicador si el router no difunde públicamente el SSID"
+    checked={false}
+  />
+</div>
