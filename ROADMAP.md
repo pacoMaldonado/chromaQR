@@ -12,7 +12,7 @@
 | **Hito 1** | **Inicialización y Base Nativa** | Configurar Astro + Tailwind + Tauri v2, fuentes, iconos y verificar compilación en Linux. | ✅ Completado |
 | **Hito 2** | **Layout Split-Screen y Sistema de Diseño** | Construir la interfaz Dark Mode tipo Linear/Raycast (`1150x760`) y componentes UI atómicos. | ✅ Completado |
 | **Hito 3** | **Motor de Payloads QR (9 Estándares)** | Implementar generadores tipados, validadores en vivo y estado reactivo para los 9 formatos. | ✅ Completado |
-| **Hito 4** | **Motor de Diseño QR y Escaneabilidad** | Integrar `qr-code-styling` a 60fps, puntos, esquinas, gradientes, logo y validador de contraste. | ⏳ Pendiente |
+| **Hito 4** | **Motor de Diseño QR y Escaneabilidad** | Integrar `qr-code-styling` a 60fps, puntos, esquinas, gradientes, logo y validador de contraste. | ✅ Completado |
 | **Hito 5** | **Integración Nativa Tauri v2 (Export & Presets)** | Exportación nativa a PNG/SVG/WEBP/PDF, copiado de imagen al portapapeles y presets en disco. | ⏳ Pendiente |
 | **Hito 6** | **Optimización de Binarios y CI/CD Release** | Configurar `Cargo.toml` (LTO/strip), iconos multiplataforma y workflow de GitHub Actions. | ⏳ Pendiente |
 
