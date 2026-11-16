@@ -85,16 +85,35 @@ npm run tauri:build
 
 ---
 
-## Publicación Multiplataforma (CI/CD)
+## Gestión de Versiones, Changelog y Publicación (CI/CD)
 
-El workflow [.github/workflows/release.yml](./.github/workflows/release.yml) se dispara automáticamente al publicar un tag semántico (`v*.*.*`):
+ChromaQR cuenta con un flujo automatizado de versionado ([Semantic Versioning](https://semver.org/lang/es/)) y registro de cambios ([CHANGELOG.md](./CHANGELOG.md) bajo el estándar *Keep a Changelog*).
+
+### 1. Generar una Nueva Versión y Actualizar `CHANGELOG.md`
+El script [scripts/release.mjs](./scripts/release.mjs) sincroniza automáticamente la versión en `package.json`, `src-tauri/Cargo.toml` y `src-tauri/tauri.conf.json`, y recopila los commits recientes dentro de [CHANGELOG.md](./CHANGELOG.md):
 
 ```bash
-git tag v1.0.0
-git push origin v1.0.0
+# Incrementar versión Patch (ej. 0.0.1 -> 0.0.2 para correcciones)
+npm run release:patch
+
+# Incrementar versión Minor (ej. 0.0.2 -> 0.1.0 para nuevas funcionalidades)
+npm run release:minor
+
+# Incrementar versión Major (ej. 0.1.0 -> 1.0.0 para cambios mayores)
+npm run release:major
 ```
 
-GitHub Actions compila y publica un **GitHub Release** con todos los instaladores:
+### 2. Publicar el Tag para Disparar GitHub Actions
+El workflow [.github/workflows/release.yml](./.github/workflows/release.yml) se dispara automáticamente al subir un tag semántico (`v*.*.*`), extrae las notas de esa versión desde `CHANGELOG.md` y publica el **GitHub Release** con todos los instaladores:
+
+```bash
+git add package.json src-tauri/Cargo.toml src-tauri/tauri.conf.json CHANGELOG.md
+git commit -m "chore(release): v0.0.2"
+git tag v0.0.2
+git push origin main --tags
+```
+
+GitHub Actions compila y adjunta automáticamente:
 - **Linux:** `.AppImage`, `.deb`, `.rpm`
 - **macOS:** `.dmg`, `.app` (Universal Binary: Apple Silicon + Intel)
 - **Windows:** `.msi`, `.exe` (NSIS)
