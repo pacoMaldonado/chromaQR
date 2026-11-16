@@ -51,6 +51,23 @@ import Button from '../ui/Button.astro';
         <Trash2 class="w-3.5 h-3.5 text-app-danger" />
       </Button>
     </div>
+
+    <!-- Inline New Preset Name Input Row -->
+    <div id="preset-new-name-row" class="hidden items-center gap-2 pt-1">
+      <input
+        id="preset-new-name-input"
+        type="text"
+        placeholder="Nombre del preset (ej. Mi Marca)..."
+        maxlength={36}
+        class="flex-1 h-8 px-2.5 rounded-lg bg-app-elevated border border-app-accent/60 text-xs text-app-text placeholder:text-zinc-500 focus-ring"
+      />
+      <Button id="preset-confirm-save-btn" variant="primary" size="sm">
+        <span>OK</span>
+      </Button>
+      <Button id="preset-cancel-save-btn" variant="ghost" size="sm">
+        <span>Cancelar</span>
+      </Button>
+    </div>
   </div>
 
   <!-- Center Fixed Canvas Area (60fps QR Preview + Scannability UX Pro Badge) -->
