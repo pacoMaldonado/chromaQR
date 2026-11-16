@@ -11,7 +11,7 @@ import Slider from '../ui/Slider.astro';
   id="colors"
   title="3. Colores y Gradientes"
   subtitle="Sólidos, gradientes lineales/radiales y transparencia de fondo"
-  badgeText="#FAFAFA / #09090B"
+  badgeText="#09090B / #FAFAFA"
   badgeId="badge-colors-summary"
 >
   <Palette slot="icon" class="w-4 h-4" />
@@ -23,7 +23,7 @@ import Slider from '../ui/Slider.astro';
         <h4 class="text-xs font-semibold uppercase tracking-wider text-app-muted">Módulos (Primer Plano)</h4>
       </div>
 
-      <ColorPicker id="dots-solid-color" label="Color Principal de Módulos" value="#FAFAFA" />
+      <ColorPicker id="dots-solid-color" label="Color Principal de Módulos" value="#09090B" />
 
       <Toggle
         id="dots-gradient-toggle"
@@ -72,7 +72,7 @@ import Slider from '../ui/Slider.astro';
       />
 
       <div id="bg-color-controls" class="space-y-3">
-        <ColorPicker id="bg-solid-color" label="Color de Fondo" value="#09090B" />
+        <ColorPicker id="bg-solid-color" label="Color de Fondo" value="#FAFAFA" />
 
         <Toggle
           id="bg-gradient-toggle"

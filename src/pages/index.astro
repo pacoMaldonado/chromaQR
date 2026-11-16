@@ -19,6 +19,7 @@ import Toast from '../components/ui/Toast.astro';
 
   <script>
     import { initPayloadController } from '../core/payloads/payload-controller';
+    import { initDesignController } from '../core/qr/design-controller';
 
     function initBaseUiInteractions(): void {
       // 1. Accordions toggle behavior
@@ -100,6 +101,7 @@ import Toast from '../components/ui/Toast.astro';
     document.addEventListener('DOMContentLoaded', () => {
       initBaseUiInteractions();
       initPayloadController();
+      initDesignController();
     });
   </script>
 </MainLayout>

@@ -87,13 +87,13 @@ export function createDefaultStyle(): QRStyleConfig {
     dots: {
       type: 'rounded',
       coloring: {
-        color: '#FAFAFA',
+        color: '#09090B',
         gradient: {
           enabled: false,
           type: 'linear',
           rotation: 45,
-          colorStop1: '#6366F1',
-          colorStop2: '#10B981',
+          colorStop1: '#4F46E5',
+          colorStop2: '#09090B',
         },
       },
     },
@@ -128,13 +128,13 @@ export function createDefaultStyle(): QRStyleConfig {
     background: {
       transparent: false,
       coloring: {
-        color: '#09090B',
+        color: '#FAFAFA',
         gradient: {
           enabled: false,
           type: 'linear',
           rotation: 135,
-          colorStop1: '#09090B',
-          colorStop2: '#18181B',
+          colorStop1: '#FAFAFA',
+          colorStop2: '#E4E4E7',
         },
       },
     },
