@@ -1,0 +1,46 @@
+---
+import { Grid } from 'lucide-astro';
+import Accordion from '../ui/Accordion.astro';
+import type { DotType } from '../../types/qr';
+
+const dotOptions: { id: DotType; label: string; desc: string }[] = [
+  { id: 'square', label: 'Cuadrado', desc: 'Clásico ISO' },
+  { id: 'rounded', label: 'Redondeado', desc: 'Suave moderno' },
+  { id: 'dots', label: 'Puntos', desc: 'Circular puro' },
+  { id: 'extra-rounded', label: 'Extra Redondo', desc: 'Orgánico fluido' },
+  { id: 'classy', label: 'Classy', desc: 'Bisel elegante' },
+  { id: 'classy-rounded', label: 'Classy Round', desc: 'Curva premium' },
+];
+---
+
+<Accordion
+  id="dots"
+  title="1. Estilo de Módulos (Puntos)"
+  subtitle="Geometría de la matriz de datos del código QR"
+  badgeText="rounded"
+  badgeId="badge-dots-type"
+  defaultOpen={true}
+>
+  <Grid slot="icon" class="w-4 h-4" />
+
+  <div class="grid grid-cols-3 gap-2" id="dots-type-group">
+    {dotOptions.map((item) => {
+      const isSelected = item.id === 'rounded';
+      return (
+        <button
+          type="button"
+          data-dot-type={item.id}
+          class:list={[
+            'flex flex-col items-start p-2.5 rounded-lg border text-left transition-all',
+            isSelected
+              ? 'bg-app-accent/15 border-app-accent text-app-text'
+              : 'bg-app-elevated/70 border-app-border text-app-muted hover:border-zinc-600 hover:text-app-text',
+          ]}
+        >
+          <span class="text-xs font-medium">{item.label}</span>
+          <span class="text-[10px] text-app-muted font-mono mt-0.5">{item.desc}</span>
+        </button>
+      );
+    })}
+  </div>
+</Accordion>

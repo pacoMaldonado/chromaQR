@@ -1,0 +1,32 @@
+---
+interface Props {
+  id?: string;
+  variant?: 'excellent' | 'good' | 'warning' | 'critical' | 'neutral';
+  class?: string;
+}
+
+const {
+  id,
+  variant = 'neutral',
+  class: className = '',
+} = Astro.props;
+
+const variantStyles: Record<NonNullable<Props['variant']>, string> = {
+  excellent: 'bg-app-success/10 border-app-success/30 text-app-success',
+  good: 'bg-app-accent/10 border-app-accent/30 text-app-accent',
+  warning: 'bg-amber-500/10 border-amber-500/30 text-amber-400',
+  critical: 'bg-app-danger/10 border-app-danger/30 text-app-danger',
+  neutral: 'bg-app-elevated border-app-border text-app-muted',
+};
+---
+
+<span
+  id={id}
+  class:list={[
+    'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-xs font-medium transition-colors',
+    variantStyles[variant],
+    className,
+  ]}
+>
+  <slot />
+</span>

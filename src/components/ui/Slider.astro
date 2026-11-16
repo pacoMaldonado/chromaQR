@@ -1,0 +1,47 @@
+---
+interface Props {
+  id: string;
+  label: string;
+  min: number;
+  max: number;
+  step?: number;
+  value: number;
+  unit?: string;
+  class?: string;
+}
+
+const {
+  id,
+  label,
+  min,
+  max,
+  step = 1,
+  value,
+  unit = '',
+  class: className = '',
+} = Astro.props;
+---
+
+<div class:list={['space-y-2', className]}>
+  <div class="flex items-center justify-between">
+    <label for={id} class="text-xs font-medium text-app-text">
+      {label}
+    </label>
+    <span
+      id={`${id}-value`}
+      class="px-1.5 py-0.5 rounded bg-app-elevated border border-app-border font-mono text-[11px] text-app-accent"
+    >
+      {value}{unit}
+    </span>
+  </div>
+  <input
+    id={id}
+    type="range"
+    min={min}
+    max={max}
+    step={step}
+    value={value}
+    data-unit={unit}
+    class="w-full"
+  />
+</div>

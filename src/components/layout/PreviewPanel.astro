@@ -1,0 +1,182 @@
+---
+import {
+  QrCode,
+  ShieldCheck,
+  ShieldAlert,
+  Copy,
+  Download,
+  BookmarkPlus,
+  Sparkles,
+  Trash2,
+} from 'lucide-astro';
+import Button from '../ui/Button.astro';
+---
+
+<aside class="w-[40%] h-full bg-app-surface/70 flex flex-col justify-between p-5 overflow-hidden">
+  <!-- Top Bar: Local Presets / Templates Selector -->
+  <div class="rounded-xl bg-app-surface border border-app-border p-3 space-y-2.5 shrink-0">
+    <div class="flex items-center justify-between">
+      <span class="inline-flex items-center gap-1.5 text-xs font-semibold text-app-text">
+        <Sparkles class="w-3.5 h-3.5 text-app-accent" />
+        Presets &amp; Plantillas
+      </span>
+      <span class="font-mono text-[10px] text-app-muted">Almacenamiento Local</span>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <select
+        id="preset-selector"
+        aria-label="Seleccionar plantilla de diseño"
+        class="flex-1 h-8 px-2.5 rounded-lg bg-app-elevated border border-app-border text-xs text-app-text focus-ring cursor-pointer"
+      >
+        <option value="chroma-indigo">Chroma Indigo (Predeterminado)</option>
+        <option value="classic-print">Clásico Impresión (Alto Contraste)</option>
+        <option value="emerald-cyber">Emerald Cyber</option>
+        <option value="minimal-dots">Minimal Dots Dark</option>
+        <option value="transparent-pro">Transparent Studio</option>
+      </select>
+
+      <Button id="preset-save-btn" variant="secondary" size="sm" title="Guardar diseño actual como preset">
+        <BookmarkPlus class="w-3.5 h-3.5 text-app-accent" />
+        <span>Guardar</span>
+      </Button>
+
+      <Button
+        id="preset-delete-btn"
+        variant="ghost"
+        size="sm"
+        class="hidden"
+        title="Eliminar preset personalizado seleccionado"
+      >
+        <Trash2 class="w-3.5 h-3.5 text-app-danger" />
+      </Button>
+    </div>
+  </div>
+
+  <!-- Center Fixed Canvas Area (60fps QR Preview + Scannability UX Pro Badge) -->
+  <div class="flex-1 flex flex-col items-center justify-center my-3 min-h-0">
+    <!-- Elevated Checkerboard Canvas Card -->
+    <div class="relative group flex flex-col items-center justify-center p-5 rounded-2xl bg-checkerboard border border-app-border shadow-panel transition-all">
+      <!-- Top Corner Metadata Pills -->
+      <div class="w-full flex items-center justify-between gap-4 mb-3 px-0.5">
+        <span
+          id="canvas-meta-resolution"
+          class="px-2 py-0.5 rounded bg-app-bg/80 backdrop-blur border border-app-border font-mono text-[10px] text-app-muted"
+        >
+          1024 × 1024 px
+        </span>
+        <span
+          id="canvas-meta-ecc"
+          class="px-2 py-0.5 rounded bg-app-bg/80 backdrop-blur border border-app-border font-mono text-[10px] text-app-accent"
+        >
+          ECC: Q (25%)
+        </span>
+      </div>
+
+      <!-- QR Code Render Mount Container -->
+      <div
+        id="qr-canvas-mount"
+        class="w-[240px] h-[240px] rounded-xl flex items-center justify-center overflow-hidden"
+      >
+        <div id="qr-placeholder-fallback" class="flex flex-col items-center justify-center gap-2 text-center">
+          <QrCode class="w-24 h-24 text-app-accent/90" />
+          <span class="font-mono text-[11px] text-app-muted">Lienzo 60fps activo</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Scannability & Contrast Indicator (UX Pro) -->
+    <div class="w-full max-w-[320px] mt-3.5 space-y-1.5">
+      <div
+        id="scannability-badge"
+        class="w-full flex items-center justify-between px-3 py-2 rounded-xl border bg-app-success/10 border-app-success/30 text-app-success transition-colors"
+      >
+        <div class="flex items-center gap-2 min-w-0">
+          <ShieldCheck id="scannability-icon-ok" class="w-4 h-4 shrink-0" />
+          <ShieldAlert id="scannability-icon-warn" class="w-4 h-4 shrink-0 hidden" />
+          <span id="scannability-summary" class="text-xs font-semibold truncate">
+            Excelente contraste
+          </span>
+        </div>
+        <span
+          id="scannability-ratio"
+          class="px-1.5 py-0.5 rounded bg-app-bg/60 font-mono text-[10px] shrink-0"
+        >
+          18.2:1
+        </span>
+      </div>
+
+      <p
+        id="scannability-detail"
+        class="text-[11px] text-app-muted text-center leading-tight px-2"
+      >
+        Lectura óptima en cámaras móviles y lectores ópticos industriales.
+      </p>
+    </div>
+  </div>
+
+  <!-- Bottom Bar: Primary Export & Clipboard Actions -->
+  <div class="rounded-xl bg-app-surface border border-app-border p-3.5 space-y-2.5 shrink-0">
+    <!-- Quick Action: Copy Image to Native Clipboard -->
+    <Button
+      id="copy-clipboard-btn"
+      variant="primary"
+      size="lg"
+      fullWidth={true}
+      title="Copiar imagen QR al portapapeles (Ctrl+C)"
+    >
+      <Copy class="w-4 h-4" />
+      <span>Copiar imagen al portapapeles</span>
+      <kbd class="ml-auto px-1.5 py-0.5 rounded bg-indigo-950/70 border border-indigo-400/30 font-mono text-[10px] text-indigo-200">
+        Ctrl+C
+      </kbd>
+    </Button>
+
+    <!-- Direct File Download / Export Buttons (PNG, SVG, WEBP, PDF) -->
+    <div class="grid grid-cols-4 gap-2">
+      <Button
+        id="export-png-btn"
+        variant="secondary"
+        size="md"
+        class="font-mono"
+        title="Exportar como imagen PNG de alta resolución"
+      >
+        <Download class="w-3.5 h-3.5 text-app-accent" />
+        <span>PNG</span>
+      </Button>
+
+      <Button
+        id="export-svg-btn"
+        variant="secondary"
+        size="md"
+        class="font-mono"
+        title="Exportar como gráfico vectorial SVG puro"
+      >
+        <Download class="w-3.5 h-3.5 text-app-success" />
+        <span>SVG</span>
+      </Button>
+
+      <Button
+        id="export-webp-btn"
+        variant="secondary"
+        size="md"
+        class="font-mono"
+        title="Exportar en formato WEBP optimizado"
+      >
+        <Download class="w-3.5 h-3.5 text-amber-400" />
+        <span>WEBP</span>
+      </Button>
+
+      <Button
+        id="export-pdf-btn"
+        variant="secondary"
+        size="md"
+        class="font-mono"
+        title="Exportar documento PDF listo para impresión"
+      >
+        <Download class="w-3.5 h-3.5 text-rose-400" />
+        <span>PDF</span>
+      </Button>
+    </div>
+  </div>
+</aside>

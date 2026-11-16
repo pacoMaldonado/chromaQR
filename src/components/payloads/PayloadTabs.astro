@@ -1,0 +1,61 @@
+---
+import {
+  Globe,
+  FileText,
+  Contact,
+  Wifi,
+  Mail,
+  MessageSquare,
+  MapPin,
+  Calendar,
+  Image as ImageIcon,
+} from 'lucide-astro';
+import type { PayloadType } from '../../types/qr';
+
+interface TabItem {
+  id: PayloadType;
+  label: string;
+  icon: any;
+}
+
+const tabs: TabItem[] = [
+  { id: 'url', label: 'URL', icon: Globe },
+  { id: 'text', label: 'Texto', icon: FileText },
+  { id: 'vcard', label: 'vCard', icon: Contact },
+  { id: 'wifi', label: 'Wi-Fi', icon: Wifi },
+  { id: 'email', label: 'Email', icon: Mail },
+  { id: 'sms', label: 'SMS / WA', icon: MessageSquare },
+  { id: 'geo', label: 'Ubicación', icon: MapPin },
+  { id: 'calendar', label: 'Evento', icon: Calendar },
+  { id: 'image', label: 'Imagen', icon: ImageIcon },
+];
+---
+
+<nav
+  class="px-5 py-2.5 border-b border-app-border bg-app-surface/90 shrink-0 overflow-x-auto"
+  aria-label="Tipos de código QR"
+>
+  <div class="flex items-center gap-1 min-w-max" role="tablist">
+    {tabs.map((tab, idx) => {
+      const Icon = tab.icon;
+      const isActive = idx === 0;
+      return (
+        <button
+          type="button"
+          role="tab"
+          data-payload-tab={tab.id}
+          aria-selected={isActive ? 'true' : 'false'}
+          class:list={[
+            'inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all duration-150 border',
+            isActive
+              ? 'bg-app-accent/15 text-app-text border-app-accent/40 shadow-sm'
+              : 'bg-transparent text-app-muted border-transparent hover:bg-app-elevated hover:text-app-text',
+          ]}
+        >
+          <Icon class="w-3.5 h-3.5 shrink-0" />
+          <span>{tab.label}</span>
+        </button>
+      );
+    })}
+  </div>
+</nav>

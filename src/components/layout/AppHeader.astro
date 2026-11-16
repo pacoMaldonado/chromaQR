@@ -1,0 +1,28 @@
+---
+import { QrCode, RotateCcw } from 'lucide-astro';
+import Button from '../ui/Button.astro';
+---
+
+<header class="h-13 px-5 py-2.5 border-b border-app-border bg-app-surface flex items-center justify-between shrink-0">
+  <div class="flex items-center gap-2.5">
+    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-app-accent/25 to-app-success/20 border border-app-accent/40 flex items-center justify-center text-app-accent shadow-glow">
+      <QrCode class="w-4 h-4" />
+    </div>
+    <div>
+      <div class="flex items-center gap-2">
+        <h1 class="text-sm font-semibold tracking-tight text-app-text leading-none">ChromaQR</h1>
+        <span class="px-1.5 py-0.5 rounded bg-app-elevated border border-app-border font-mono text-[10px] text-app-muted">
+          PRO STUDIO
+        </span>
+      </div>
+      <p class="text-[11px] text-app-muted mt-0.5">Generador &amp; Diseñador QR de Alto Rendimiento</p>
+    </div>
+  </div>
+
+  <div class="flex items-center gap-2">
+    <Button id="reset-all-btn" variant="ghost" size="sm" title="Restablecer valores por defecto">
+      <RotateCcw class="w-3.5 h-3.5" />
+      <span>Restablecer</span>
+    </Button>
+  </div>
+</header>
