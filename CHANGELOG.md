@@ -11,6 +11,14 @@ y este proyecto se adhiere a [Semantic Versioning (SemVer)](https://semver.org/l
 
 ---
 
+## [0.0.3] - 2026-11-16
+
+### Fixed (Correcciones)
+- **Esquema de Permisos ACL en Tauri v2 (`src-tauri/capabilities/default.json`):** Reemplazado el identificador inexistente `"fs:allow-app-data-recursive"` (que provocaba un fallo en `tauri_build::build()` al final de la compilación de Rust en los 3 sistemas operativos) por los permisos oficiales autogenerados de `tauri-plugin-fs` v2: `"fs:allow-appdata-read-recursive"`, `"fs:allow-appdata-write-recursive"` y `"fs:scope-appdata-recursive"`.
+- **Regeneración Oficial de Iconos Nativos (`src-tauri/icons/`):** Regenerados todos los iconos multiplataforma (`.icns`, `.ico`, `.png`, `Square*Logo.png`, `StoreLogo.png`) a partir de un master `1024×1024` utilizando directamente el generador oficial `tauri icon` de `tauri-cli 2.12.4`.
+
+---
+
 ## [0.0.2] - 2026-11-16
 
 ### Added (Nuevas Funcionalidades)
