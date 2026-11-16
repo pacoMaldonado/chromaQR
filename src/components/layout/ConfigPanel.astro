@@ -1,9 +1,16 @@
 ---
-import { Code2, AlertCircle } from 'lucide-astro';
+import { Code2, AlertCircle, CheckCircle2 } from 'lucide-astro';
 import AppHeader from './AppHeader.astro';
 import PayloadTabs from '../payloads/PayloadTabs.astro';
-import Input from '../ui/Input.astro';
-import Toggle from '../ui/Toggle.astro';
+import UrlForm from '../payloads/UrlForm.astro';
+import TextForm from '../payloads/TextForm.astro';
+import VCardForm from '../payloads/VCardForm.astro';
+import WifiForm from '../payloads/WifiForm.astro';
+import EmailForm from '../payloads/EmailForm.astro';
+import SmsWhatsappForm from '../payloads/SmsWhatsappForm.astro';
+import GeoForm from '../payloads/GeoForm.astro';
+import CalendarForm from '../payloads/CalendarForm.astro';
+import ImageForm from '../payloads/ImageForm.astro';
 import DotsAccordion from '../design/DotsAccordion.astro';
 import CornersAccordion from '../design/CornersAccordion.astro';
 import ColorsAccordion from '../design/ColorsAccordion.astro';
@@ -28,48 +35,46 @@ import TechAccordion from '../design/TechAccordion.astro';
             Datos del Payload · URL / Sitio Web
           </h2>
           <p id="payload-section-subtitle" class="text-[11px] text-app-muted mt-0.5">
-            Enlace directo con validación de protocolo HTTPS y limpieza de parámetros UTM
+            Enlace web con validación de protocolo HTTPS y limpieza de parámetros UTM
           </p>
         </div>
         <span
           id="payload-byte-counter"
           class="px-2 py-0.5 rounded bg-app-elevated border border-app-border font-mono text-[11px] text-app-muted"
         >
-          24 bytes
+          20 bytes
         </span>
       </div>
 
-      <!-- Dynamic Forms Slot / Default URL Form Preview -->
+      <!-- Dynamic 9 Payload Forms -->
       <div id="payload-forms-wrapper" class="space-y-3">
-        <slot name="payload-forms">
-          <div data-payload-panel="url" class="space-y-3">
-            <Input
-              id="url-input"
-              label="Dirección Web (URL)"
-              type="url"
-              placeholder="https://chromaqr.app"
-              value="https://chromaqr.app"
-              hint="HTTPS recomendado"
-              mono={true}
-              required={true}
-            />
-            <Toggle
-              id="url-clean-utm"
-              label="Limpiar parámetros de rastreo (UTM / Click IDs)"
-              description="Elimina automáticamente utm_source, utm_medium, fbclid, gclid, etc."
-              checked={true}
-            />
-          </div>
-        </slot>
+        <UrlForm />
+        <TextForm />
+        <VCardForm />
+        <WifiForm />
+        <EmailForm />
+        <SmsWhatsappForm />
+        <GeoForm />
+        <CalendarForm />
+        <ImageForm />
       </div>
 
-      <!-- Validation Alert Banner (Hidden when valid) -->
+      <!-- Validation Error Banner (Hidden when valid) -->
       <div
         id="payload-validation-banner"
         class="hidden items-center gap-2 px-3 py-2 rounded-lg bg-app-danger/10 border border-app-danger/30 text-app-danger text-xs"
       >
         <AlertCircle class="w-4 h-4 shrink-0" />
         <span id="payload-validation-message">Datos de entrada inválidos</span>
+      </div>
+
+      <!-- Validation Warning / Info Banner -->
+      <div
+        id="payload-warning-banner"
+        class="hidden items-center gap-2 px-3 py-2 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs"
+      >
+        <CheckCircle2 class="w-4 h-4 shrink-0 text-amber-400" />
+        <span id="payload-warning-message">Aviso técnico</span>
       </div>
 
       <!-- Raw Encoded String Technical Preview -->

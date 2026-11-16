@@ -1,0 +1,37 @@
+---
+import Input from '../ui/Input.astro';
+---
+
+<div data-payload-panel="email" class="hidden space-y-3">
+  <div class="grid grid-cols-2 gap-3">
+    <Input
+      id="email-to"
+      label="Destinatario (Para)"
+      type="email"
+      placeholder="contacto@chromaqr.app"
+      value="contacto@chromaqr.app"
+      mono={true}
+      required={true}
+    />
+    <Input
+      id="email-subject"
+      label="Asunto del Correo"
+      placeholder="Consulta sobre ChromaQR Desktop"
+      value="Consulta sobre ChromaQR Desktop"
+    />
+  </div>
+
+  <div class="space-y-1.5">
+    <label for="email-body" class="block text-xs font-medium text-app-text">
+      Cuerpo del Mensaje
+    </label>
+    <textarea
+      id="email-body"
+      rows={3}
+      placeholder="Escribe el mensaje predefinido..."
+      class="w-full p-3 rounded-lg bg-app-elevated border border-app-border text-xs text-app-text placeholder:text-zinc-500 font-sans focus-ring resize-none"
+    >Hola equipo,
+
+Me gustaría recibir más información sobre ChromaQR.</textarea>
+  </div>
+</div>

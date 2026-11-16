@@ -1,0 +1,24 @@
+---
+import Input from '../ui/Input.astro';
+import Toggle from '../ui/Toggle.astro';
+---
+
+<div data-payload-panel="url" class="space-y-3">
+  <Input
+    id="url-input"
+    label="Dirección Web (URL)"
+    type="url"
+    placeholder="https://chromaqr.app"
+    value="https://chromaqr.app"
+    hint="HTTPS validado"
+    mono={true}
+    required={true}
+  />
+
+  <Toggle
+    id="url-clean-utm"
+    label="Limpiar parámetros de rastreo (UTM / Click IDs)"
+    description="Elimina automáticamente utm_source, utm_medium, utm_campaign, fbclid, gclid, etc."
+    checked={true}
+  />
+</div>

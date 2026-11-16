@@ -1,0 +1,60 @@
+---
+import Input from '../ui/Input.astro';
+import Toggle from '../ui/Toggle.astro';
+---
+
+<div data-payload-panel="calendar" class="hidden space-y-3">
+  <div class="grid grid-cols-2 gap-3">
+    <Input
+      id="cal-title"
+      label="Título del Evento"
+      placeholder="Lanzamiento Oficial ChromaQR v1.0"
+      value="Lanzamiento Oficial ChromaQR v1.0"
+      required={true}
+    />
+    <Input
+      id="cal-location"
+      label="Ubicación / Sala / Enlace"
+      placeholder="Auditorio Principal / Streaming"
+      value="Auditorio Principal / Streaming"
+    />
+  </div>
+
+  <div class="grid grid-cols-2 gap-3">
+    <Input
+      id="cal-start"
+      label="Inicio del Evento"
+      type="datetime-local"
+      value="2026-11-20T10:00"
+      mono={true}
+      required={true}
+    />
+    <Input
+      id="cal-end"
+      label="Fin del Evento"
+      type="datetime-local"
+      value="2026-11-20T11:30"
+      mono={true}
+      required={true}
+    />
+  </div>
+
+  <Toggle
+    id="cal-allday"
+    label="Evento de día completo"
+    description="Codifica fechas sin hora específica (VALUE=DATE en estándar iCal)"
+    checked={false}
+  />
+
+  <div class="space-y-1.5">
+    <label for="cal-desc" class="block text-xs font-medium text-app-text">
+      Descripción / Notas del Evento
+    </label>
+    <textarea
+      id="cal-desc"
+      rows={2}
+      placeholder="Detalles o agenda del evento..."
+      class="w-full p-2.5 rounded-lg bg-app-elevated border border-app-border text-xs text-app-text placeholder:text-zinc-500 font-sans focus-ring resize-none"
+    >Presentación de la arquitectura Tauri v2 + Astro de ChromaQR.</textarea>
+  </div>
+</div>
