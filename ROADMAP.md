@@ -14,7 +14,7 @@
 | **Hito 3** | **Motor de Payloads QR (9 Estándares)** | Implementar generadores tipados, validadores en vivo y estado reactivo para los 9 formatos. | ✅ Completado |
 | **Hito 4** | **Motor de Diseño QR y Escaneabilidad** | Integrar `qr-code-styling` a 60fps, puntos, esquinas, gradientes, logo y validador de contraste. | ✅ Completado |
 | **Hito 5** | **Integración Nativa Tauri v2 (Export & Presets)** | Exportación nativa a PNG/SVG/WEBP/PDF, copiado de imagen al portapapeles y presets en disco. | ✅ Completado |
-| **Hito 6** | **Optimización de Binarios y CI/CD Release** | Configurar `Cargo.toml` (LTO/strip), iconos multiplataforma y workflow de GitHub Actions. | ⏳ Pendiente |
+| **Hito 6** | **Optimización de Binarios y CI/CD Release** | Configurar `Cargo.toml` (LTO/strip), iconos multiplataforma y workflow de GitHub Actions. | ✅ Completado |
 
 ---
 
