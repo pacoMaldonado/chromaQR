@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Astro build output & cache
+dist/
+.astro/
+
+# Rust / Tauri build output
+src-tauri/target/
+src-tauri/gen/
+src-tauri/WixTools/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Logs & OS artifacts
+*.log
+npm-debug.log*
+pnpm-debug.log*
+.DS_Store
+Thumbs.db
+
+# Editor directories
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo

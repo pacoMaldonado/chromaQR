@@ -1,0 +1,35 @@
+{
+  "name": "chromaqr",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "High-performance cross-platform desktop QR code generator & designer built with Tauri v2 and Astro",
+  "license": "MIT",
+  "scripts": {
+    "dev": "ASTRO_TELEMETRY_DISABLED=1 astro dev",
+    "build": "ASTRO_TELEMETRY_DISABLED=1 astro check && ASTRO_TELEMETRY_DISABLED=1 astro build",
+    "preview": "ASTRO_TELEMETRY_DISABLED=1 astro preview",
+    "tauri": "tauri",
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.4",
+    "@astrojs/tailwind": "^5.1.2",
+    "@fontsource/inter": "^5.1.0",
+    "@fontsource/jetbrains-mono": "^5.1.0",
+    "@tauri-apps/api": "^2.2.0",
+    "@tauri-apps/plugin-clipboard-manager": "^2.2.0",
+    "@tauri-apps/plugin-dialog": "^2.2.0",
+    "@tauri-apps/plugin-fs": "^2.2.0",
+    "astro": "^5.1.1",
+    "jspdf": "^2.5.2",
+    "lucide-astro": "^0.468.0",
+    "qr-code-styling": "^1.8.4",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.7.2"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.2.0"
+  }
+}
