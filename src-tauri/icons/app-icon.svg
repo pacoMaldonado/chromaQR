@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" fill="none">
+  <defs>
+    <linearGradient id="chroma-grad" x1="0" y1="0" x2="1024" y2="1024" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#6366F1"/>
+      <stop offset="100%" stop-color="#10B981"/>
+    </linearGradient>
+  </defs>
+  <rect x="40" y="40" width="944" height="944" rx="220" fill="#09090B" stroke="#27272A" stroke-width="32"/>
+  <!-- Top-left eye -->
+  <rect x="160" y="160" width="288" height="288" rx="64" stroke="url(#chroma-grad)" stroke-width="48"/>
+  <rect x="248" y="248" width="112" height="112" rx="24" fill="#6366F1"/>
+  <!-- Top-right eye -->
+  <rect x="576" y="160" width="288" height="288" rx="64" stroke="url(#chroma-grad)" stroke-width="48"/>
+  <rect x="664" y="248" width="112" height="112" rx="24" fill="#10B981"/>
+  <!-- Bottom-left eye -->
+  <rect x="160" y="576" width="288" height="288" rx="64" stroke="url(#chroma-grad)" stroke-width="48"/>
+  <rect x="248" y="664" width="112" height="112" rx="24" fill="#6366F1"/>
+  <!-- Data modules bottom-right -->
+  <rect x="576" y="576" width="112" height="112" rx="32" fill="#FAFAFA"/>
+  <rect x="752" y="576" width="112" height="112" rx="32" fill="#6366F1"/>
+  <rect x="576" y="752" width="112" height="112" rx="32" fill="#10B981"/>
+  <rect x="752" y="752" width="112" height="112" rx="32" fill="#FAFAFA"/>
+</svg>

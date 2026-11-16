@@ -1,0 +1,87 @@
+name: Release Multiplatform Binaries
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish-tauri:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: 'ubuntu-22.04'
+            args: ''
+          - platform: 'macos-latest'
+            args: '--target universal-apple-darwin'
+          - platform: 'windows-latest'
+            args: ''
+
+    runs-on: ${{ matrix.platform }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Linux system dependencies (WebKitGTK 4.1, AppImage, RPM)
+        if: matrix.platform == 'ubuntu-22.04'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libwebkit2gtk-4.1-dev \
+            libjavascriptcoregtk-4.1-dev \
+            libappindicator3-dev \
+            librsvg2-dev \
+            patchelf \
+            rpm \
+            file \
+            libssl-dev \
+            libgtk-3-dev \
+            libsoup-3.0-dev
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Setup Rust stable toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
+
+      - name: Rust Cargo cache
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: './src-tauri -> target'
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Verify frontend static build
+        run: npm run build
+
+      - name: Build and publish Tauri v2 installers
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: ${{ github.ref_name }}
+          releaseName: 'ChromaQR ${{ github.ref_name }}'
+          releaseBody: |
+            ## ChromaQR ${{ github.ref_name }} — Lanzamiento Oficial Multiplataforma
+
+            Generador y diseñador de códigos QR de escritorio de alto rendimiento construido con **Tauri v2 (Rust)** y **Astro**.
+
+            ### Instaladores Disponibles
+            - **Linux:** `.AppImage` (Universal portable), `.deb` (Debian/Ubuntu) y `.rpm` (Fedora/RHEL/openSUSE)
+            - **macOS:** `.dmg` y `.app` (Universal Binary: Apple Silicon M1/M2/M3/M4 + Intel)
+            - **Windows:** `.msi` (Windows Installer) y `.exe` (NSIS Setup)
+          releaseDraft: false
+          prerelease: false
+          args: ${{ matrix.args }}
