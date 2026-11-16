@@ -1,0 +1,89 @@
+---
+import { ImagePlus, Trash2, UploadCloud } from 'lucide-astro';
+import Accordion from '../ui/Accordion.astro';
+import Slider from '../ui/Slider.astro';
+import Toggle from '../ui/Toggle.astro';
+import Button from '../ui/Button.astro';
+---
+
+<Accordion
+  id="logo"
+  title="4. Logo Central"
+  subtitle="Incrusta marca o icono central (PNG, SVG, JPG, WEBP)"
+  badgeText="Sin logo"
+  badgeId="badge-logo-status"
+>
+  <ImagePlus slot="icon" class="w-4 h-4" />
+
+  <div class="space-y-4">
+    <!-- Drag & Drop Zone -->
+    <div
+      id="logo-dropzone"
+      class="relative flex flex-col items-center justify-center p-4 rounded-xl border border-dashed border-zinc-700 hover:border-app-accent bg-app-elevated/40 hover:bg-app-accent/5 transition-all cursor-pointer text-center"
+    >
+      <input
+        id="logo-file-input"
+        type="file"
+        accept="image/png,image/svg+xml,image/jpeg,image/webp"
+        class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+      />
+      <UploadCloud class="w-6 h-6 text-app-accent mb-1.5" />
+      <p class="text-xs font-medium text-app-text">
+        Arrastra una imagen aquí o <span class="text-app-accent underline">explora archivos</span>
+      </p>
+      <p class="text-[11px] font-mono text-app-muted mt-0.5">Soporta PNG, SVG, WEBP y JPG</p>
+    </div>
+
+    <!-- Active Logo Preview Bar -->
+    <div
+      id="logo-active-bar"
+      class="hidden items-center justify-between p-2.5 rounded-lg bg-app-elevated border border-app-border"
+    >
+      <div class="flex items-center gap-2.5 min-w-0">
+        <img
+          id="logo-thumb-preview"
+          src=""
+          alt="Logo preview"
+          class="w-8 h-8 rounded bg-checkerboard object-contain p-0.5 border border-app-border"
+        />
+        <div class="min-w-0">
+          <p id="logo-filename" class="text-xs font-medium text-app-text truncate">logo.svg</p>
+          <p class="text-[10px] font-mono text-app-success">Logo embebido activo</p>
+        </div>
+      </div>
+      <Button id="logo-remove-btn" variant="danger" size="sm" title="Quitar logo">
+        <Trash2 class="w-3.5 h-3.5" />
+        <span>Quitar</span>
+      </Button>
+    </div>
+
+    <!-- Logo Sliders & Options -->
+    <div class="grid grid-cols-2 gap-4">
+      <Slider
+        id="logo-size-slider"
+        label="Tamaño del Logo"
+        min={10}
+        max={40}
+        step={1}
+        value={22}
+        unit="%"
+      />
+      <Slider
+        id="logo-margin-slider"
+        label="Margen Interno"
+        min={0}
+        max={20}
+        step={1}
+        value={6}
+        unit="px"
+      />
+    </div>
+
+    <Toggle
+      id="logo-hide-dots-toggle"
+      label="Ocultar módulos detrás del logo"
+      description="Limpia el área central para evitar colisión visual con el logo"
+      checked={true}
+    />
+  </div>
+</Accordion>

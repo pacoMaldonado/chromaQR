@@ -1,0 +1,25 @@
+---
+import { CheckCircle2, AlertTriangle, Info } from 'lucide-astro';
+---
+
+<div
+  id="toast-container"
+  class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"
+  aria-live="polite"
+>
+  <div
+    id="app-toast"
+    class="hidden pointer-events-auto items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-app-surface/95 backdrop-blur-md border border-app-border shadow-panel text-xs text-app-text transition-all duration-200"
+  >
+    <span id="app-toast-icon-success" class="text-app-success">
+      <CheckCircle2 class="w-4 h-4" />
+    </span>
+    <span id="app-toast-icon-warning" class="hidden text-amber-400">
+      <AlertTriangle class="w-4 h-4" />
+    </span>
+    <span id="app-toast-icon-info" class="hidden text-app-accent">
+      <Info class="w-4 h-4" />
+    </span>
+    <span id="app-toast-message" class="font-medium">Listo</span>
+  </div>
+</div>

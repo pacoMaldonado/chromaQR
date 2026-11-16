@@ -1,0 +1,87 @@
+---
+import { Scan } from 'lucide-astro';
+import Accordion from '../ui/Accordion.astro';
+import Toggle from '../ui/Toggle.astro';
+import ColorPicker from '../ui/ColorPicker.astro';
+import type { CornerSquareType, CornerDotType } from '../../types/qr';
+
+const outerTypes: { id: CornerSquareType; label: string }[] = [
+  { id: 'extra-rounded', label: 'Redondeado' },
+  { id: 'square', label: 'Cuadrado' },
+  { id: 'dot', label: 'Circular' },
+];
+
+const innerTypes: { id: CornerDotType; label: string }[] = [
+  { id: 'dot', label: 'Círculo' },
+  { id: 'square', label: 'Cuadrado' },
+];
+---
+
+<Accordion
+  id="corners"
+  title="2. Esquinas (Eyes)"
+  subtitle="Marco exterior y núcleo de los 3 patrones buscadores"
+  badgeText="extra-rounded / dot"
+  badgeId="badge-corners-type"
+>
+  <Scan slot="icon" class="w-4 h-4" />
+
+  <div class="space-y-4">
+    <!-- Outer Corner Frame -->
+    <div class="space-y-1.5">
+      <span class="block text-xs font-medium text-app-text">Marco Exterior (Corner Square)</span>
+      <div class="grid grid-cols-3 gap-2" id="corner-square-group">
+        {outerTypes.map((opt) => (
+          <button
+            type="button"
+            data-corner-square={opt.id}
+            class:list={[
+              'px-3 py-2 rounded-lg border text-xs font-medium transition-all',
+              opt.id === 'extra-rounded'
+                ? 'bg-app-accent/15 border-app-accent text-app-text'
+                : 'bg-app-elevated/70 border-app-border text-app-muted hover:text-app-text',
+            ]}
+          >
+            {opt.label}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <!-- Inner Corner Dot -->
+    <div class="space-y-1.5">
+      <span class="block text-xs font-medium text-app-text">Punto Interior (Corner Dot)</span>
+      <div class="grid grid-cols-2 gap-2" id="corner-dot-group">
+        {innerTypes.map((opt) => (
+          <button
+            type="button"
+            data-corner-dot={opt.id}
+            class:list={[
+              'px-3 py-2 rounded-lg border text-xs font-medium transition-all',
+              opt.id === 'dot'
+                ? 'bg-app-accent/15 border-app-accent text-app-text'
+                : 'bg-app-elevated/70 border-app-border text-app-muted hover:text-app-text',
+            ]}
+          >
+            {opt.label}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <!-- Custom Eye Colors -->
+    <div class="pt-2 border-t border-app-border space-y-3">
+      <Toggle
+        id="corners-custom-color-toggle"
+        label="Colores independientes para esquinas"
+        description="Personalizar el color del marco y centro de las esquinas por separado"
+        checked={false}
+      />
+
+      <div id="corners-custom-colors-panel" class="hidden grid-cols-2 gap-3 pt-1">
+        <ColorPicker id="corner-square-color" label="Color Marco Exterior" value="#6366F1" />
+        <ColorPicker id="corner-dot-color" label="Color Punto Interior" value="#10B981" />
+      </div>
+    </div>
+  </div>
+</Accordion>

@@ -1,0 +1,112 @@
+---
+import { Palette } from 'lucide-astro';
+import Accordion from '../ui/Accordion.astro';
+import ColorPicker from '../ui/ColorPicker.astro';
+import Toggle from '../ui/Toggle.astro';
+import Select from '../ui/Select.astro';
+import Slider from '../ui/Slider.astro';
+---
+
+<Accordion
+  id="colors"
+  title="3. Colores y Gradientes"
+  subtitle="Sólidos, gradientes lineales/radiales y transparencia de fondo"
+  badgeText="#FAFAFA / #09090B"
+  badgeId="badge-colors-summary"
+>
+  <Palette slot="icon" class="w-4 h-4" />
+
+  <div class="space-y-5">
+    <!-- Foreground / Dots Coloring -->
+    <div class="space-y-3">
+      <div class="flex items-center justify-between">
+        <h4 class="text-xs font-semibold uppercase tracking-wider text-app-muted">Módulos (Primer Plano)</h4>
+      </div>
+
+      <ColorPicker id="dots-solid-color" label="Color Principal de Módulos" value="#FAFAFA" />
+
+      <Toggle
+        id="dots-gradient-toggle"
+        label="Usar Gradiente en Módulos"
+        description="Aplica transición lineal o radial entre dos tonos"
+        checked={false}
+      />
+
+      <div id="dots-gradient-panel" class="hidden space-y-3 p-3 rounded-lg bg-app-surface border border-app-border">
+        <div class="grid grid-cols-2 gap-3">
+          <ColorPicker id="dots-grad-stop1" label="Color Inicial" value="#6366F1" />
+          <ColorPicker id="dots-grad-stop2" label="Color Final" value="#10B981" />
+        </div>
+        <div class="grid grid-cols-2 gap-3 items-end">
+          <Select
+            id="dots-grad-type"
+            label="Tipo de Gradiente"
+            value="linear"
+            options={[
+              { value: 'linear', label: 'Lineal' },
+              { value: 'radial', label: 'Radial' },
+            ]}
+          />
+          <Slider
+            id="dots-grad-rotation"
+            label="Ángulo"
+            min={0}
+            max={360}
+            step={15}
+            value={45}
+            unit="°"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Background Coloring -->
+    <div class="pt-4 border-t border-app-border space-y-3">
+      <h4 class="text-xs font-semibold uppercase tracking-wider text-app-muted">Fondo del QR</h4>
+
+      <Toggle
+        id="bg-transparent-toggle"
+        label="Fondo Transparente"
+        description="Exporta sin fondo (ideal para diseño gráfico sobre PNG, SVG y WEBP)"
+        checked={false}
+      />
+
+      <div id="bg-color-controls" class="space-y-3">
+        <ColorPicker id="bg-solid-color" label="Color de Fondo" value="#09090B" />
+
+        <Toggle
+          id="bg-gradient-toggle"
+          label="Usar Gradiente en Fondo"
+          checked={false}
+        />
+
+        <div id="bg-gradient-panel" class="hidden space-y-3 p-3 rounded-lg bg-app-surface border border-app-border">
+          <div class="grid grid-cols-2 gap-3">
+            <ColorPicker id="bg-grad-stop1" label="Fondo Stop 1" value="#09090B" />
+            <ColorPicker id="bg-grad-stop2" label="Fondo Stop 2" value="#18181B" />
+          </div>
+          <div class="grid grid-cols-2 gap-3 items-end">
+            <Select
+              id="bg-grad-type"
+              label="Tipo de Gradiente"
+              value="linear"
+              options={[
+                { value: 'linear', label: 'Lineal' },
+                { value: 'radial', label: 'Radial' },
+              ]}
+            />
+            <Slider
+              id="bg-grad-rotation"
+              label="Ángulo"
+              min={0}
+              max={360}
+              step={15}
+              value={135}
+              unit="°"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Accordion>

@@ -1,0 +1,61 @@
+---
+interface Props {
+  id: string;
+  label?: string;
+  type?: 'text' | 'url' | 'email' | 'tel' | 'password' | 'number' | 'datetime-local' | 'date';
+  placeholder?: string;
+  value?: string | number;
+  hint?: string;
+  mono?: boolean;
+  required?: boolean;
+  min?: string | number;
+  max?: string | number;
+  step?: string | number;
+  class?: string;
+}
+
+const {
+  id,
+  label,
+  type = 'text',
+  placeholder = '',
+  value = '',
+  hint,
+  mono = false,
+  required = false,
+  min,
+  max,
+  step,
+  class: className = '',
+} = Astro.props;
+---
+
+<div class:list={['space-y-1.5', className]}>
+  {label && (
+    <div class="flex items-center justify-between">
+      <label for={id} class="block text-xs font-medium text-app-text">
+        {label}
+        {required && <span class="text-app-accent ml-0.5">*</span>}
+      </label>
+      {hint && <span class="text-[11px] text-app-muted font-mono">{hint}</span>}
+    </div>
+  )}
+  <div class="relative flex items-center">
+    <input
+      id={id}
+      name={id}
+      type={type}
+      placeholder={placeholder}
+      value={value}
+      required={required}
+      min={min}
+      max={max}
+      step={step}
+      class:list={[
+        'w-full h-9 px-3 rounded-lg bg-app-elevated border border-app-border text-xs text-app-text placeholder:text-zinc-500 transition-colors focus-ring',
+        mono ? 'font-mono' : 'font-sans',
+      ]}
+    />
+    <slot name="suffix" />
+  </div>
+</div>

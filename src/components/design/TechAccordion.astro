@@ -1,0 +1,75 @@
+---
+import { Sliders } from 'lucide-astro';
+import Accordion from '../ui/Accordion.astro';
+import Slider from '../ui/Slider.astro';
+import type { ErrorCorrectionLevel } from '../../types/qr';
+
+const eccLevels: { id: ErrorCorrectionLevel; name: string; recovery: string }[] = [
+  { id: 'L', name: 'Bajo (L)', recovery: '~7%' },
+  { id: 'M', name: 'Medio (M)', recovery: '~15%' },
+  { id: 'Q', name: 'Cuartil (Q)', recovery: '~25%' },
+  { id: 'H', name: 'Alto (H)', recovery: '~30%' },
+];
+---
+
+<Accordion
+  id="tech"
+  title="5. Opciones Técnicas"
+  subtitle="Corrección de errores Reed-Solomon, resolución y Quiet Zone"
+  badgeText="ECC: Q · 1024px"
+  badgeId="badge-tech-summary"
+>
+  <Sliders slot="icon" class="w-4 h-4" />
+
+  <div class="space-y-4">
+    <!-- Error Correction Level -->
+    <div class="space-y-1.5">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-medium text-app-text">Nivel de Corrección de Errores (ECC)</span>
+        <span class="text-[11px] font-mono text-app-muted">Recomendado Q o H con logo</span>
+      </div>
+      <div class="grid grid-cols-4 gap-2" id="ecc-level-group">
+        {eccLevels.map((lvl) => {
+          const isSelected = lvl.id === 'Q';
+          return (
+            <button
+              type="button"
+              data-ecc-level={lvl.id}
+              class:list={[
+                'flex flex-col items-center py-2 px-2 rounded-lg border transition-all',
+                isSelected
+                  ? 'bg-app-accent/15 border-app-accent text-app-text'
+                  : 'bg-app-elevated/70 border-app-border text-app-muted hover:text-app-text',
+              ]}
+            >
+              <span class="text-xs font-semibold font-mono">{lvl.name}</span>
+              <span class="text-[10px] font-mono text-app-muted mt-0.5">{lvl.recovery}</span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+
+    <!-- Output Resolution & Quiet Zone -->
+    <div class="grid grid-cols-2 gap-4 pt-2 border-t border-app-border">
+      <Slider
+        id="tech-size-slider"
+        label="Resolución de Salida"
+        min={256}
+        max={4096}
+        step={64}
+        value={1024}
+        unit="px"
+      />
+      <Slider
+        id="tech-margin-slider"
+        label="Margen Silencioso (Quiet Zone)"
+        min={0}
+        max={64}
+        step={2}
+        value={16}
+        unit="px"
+      />
+    </div>
+  </div>
+</Accordion>

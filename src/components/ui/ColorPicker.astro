@@ -1,0 +1,37 @@
+---
+interface Props {
+  id: string;
+  label: string;
+  value?: string;
+  class?: string;
+}
+
+const {
+  id,
+  label,
+  value = '#6366F1',
+  class: className = '',
+} = Astro.props;
+---
+
+<div class:list={['space-y-1.5', className]}>
+  <label for={`${id}-hex`} class="block text-xs font-medium text-app-text">
+    {label}
+  </label>
+  <div class="flex items-center gap-2">
+    <input
+      id={id}
+      type="color"
+      value={value}
+      class="w-9 h-9 rounded-lg shrink-0 bg-app-elevated p-1 border border-app-border cursor-pointer"
+    />
+    <input
+      id={`${id}-hex`}
+      type="text"
+      value={value.toUpperCase()}
+      maxlength={7}
+      spellcheck="false"
+      class="w-full h-9 px-3 rounded-lg bg-app-elevated border border-app-border font-mono text-xs text-app-text uppercase focus-ring"
+    />
+  </div>
+</div>
