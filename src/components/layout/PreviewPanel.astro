@@ -8,13 +8,14 @@ import {
   BookmarkPlus,
   Sparkles,
   Trash2,
+  ChevronDown,
 } from 'lucide-astro';
 import Button from '../ui/Button.astro';
 ---
 
-<aside class="w-[40%] h-full bg-app-surface/70 flex flex-col justify-between p-5 overflow-hidden">
+<aside class="w-[40%] h-full bg-app-surface/70 flex flex-col justify-between p-5 overflow-hidden transition-colors">
   <!-- Top Bar: Local Presets / Templates Selector -->
-  <div class="rounded-xl bg-app-surface border border-app-border p-3 space-y-2.5 shrink-0">
+  <div class="rounded-xl bg-app-surface border border-app-border p-3 space-y-2.5 shrink-0 relative z-20">
     <div class="flex items-center justify-between">
       <span class="inline-flex items-center gap-1.5 text-xs font-semibold text-app-text">
         <Sparkles class="w-3.5 h-3.5 text-app-accent" />
@@ -24,17 +25,33 @@ import Button from '../ui/Button.astro';
     </div>
 
     <div class="flex items-center gap-2">
-      <select
-        id="preset-selector"
-        aria-label="Seleccionar plantilla de diseño"
-        class="flex-1 h-8 px-2.5 rounded-lg bg-app-elevated border border-app-border text-xs text-app-text focus-ring cursor-pointer"
-      >
-        <option value="chroma-indigo">Chroma Indigo (Predeterminado)</option>
-        <option value="classic-print">Clásico Impresión (Alto Contraste)</option>
-        <option value="emerald-cyber">Emerald Cyber</option>
-        <option value="minimal-dots">Minimal Dots Dark</option>
-        <option value="transparent-pro">Transparent Studio</option>
-      </select>
+      <!-- Custom Theme-Aware Dropdown (100% Immune to Linux GTK native <select> bugs) -->
+      <div class="relative flex-1 min-w-0" id="preset-dropdown-container">
+        <input type="hidden" id="preset-selector" value="chroma-indigo" />
+        <button
+          id="preset-dropdown-trigger"
+          type="button"
+          aria-haspopup="listbox"
+          aria-expanded="false"
+          class="w-full h-8 px-2.5 rounded-lg bg-app-elevated hover:bg-app-active/60 border border-app-border text-xs text-app-text flex items-center justify-between gap-2 transition-colors focus-ring"
+        >
+          <span id="preset-dropdown-label" class="truncate font-medium">
+            Chroma Indigo (Predeterminado)
+          </span>
+          <ChevronDown
+            id="preset-dropdown-chevron"
+            class="w-3.5 h-3.5 text-app-muted shrink-0 transition-transform duration-150"
+          />
+        </button>
+
+        <ul
+          id="preset-dropdown-menu"
+          role="listbox"
+          class="hidden absolute left-0 right-0 top-9 z-50 max-h-56 overflow-y-auto rounded-xl bg-app-surface border border-app-border shadow-panel py-1 text-xs"
+        >
+          <!-- Options populated dynamically by export-preset-controller.ts -->
+        </ul>
+      </div>
 
       <Button id="preset-save-btn" variant="secondary" size="sm" title="Guardar diseño actual como preset">
         <BookmarkPlus class="w-3.5 h-3.5 text-app-accent" />
@@ -78,13 +95,13 @@ import Button from '../ui/Button.astro';
       <div class="w-full flex items-center justify-between gap-4 mb-3 px-0.5">
         <span
           id="canvas-meta-resolution"
-          class="px-2 py-0.5 rounded bg-app-bg/80 backdrop-blur border border-app-border font-mono text-[10px] text-app-muted"
+          class="px-2 py-0.5 rounded bg-app-surface/90 backdrop-blur border border-app-border font-mono text-[10px] text-app-muted"
         >
           1024 × 1024 px
         </span>
         <span
           id="canvas-meta-ecc"
-          class="px-2 py-0.5 rounded bg-app-bg/80 backdrop-blur border border-app-border font-mono text-[10px] text-app-accent"
+          class="px-2 py-0.5 rounded bg-app-surface/90 backdrop-blur border border-app-border font-mono text-[10px] text-app-accent"
         >
           ECC: Q (25%)
         </span>
@@ -117,7 +134,7 @@ import Button from '../ui/Button.astro';
         </div>
         <span
           id="scannability-ratio"
-          class="px-1.5 py-0.5 rounded bg-app-bg/60 font-mono text-[10px] shrink-0"
+          class="px-1.5 py-0.5 rounded bg-app-surface/70 font-mono text-[10px] shrink-0"
         >
           18.2:1
         </span>

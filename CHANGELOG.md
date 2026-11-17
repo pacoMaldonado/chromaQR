@@ -11,6 +11,19 @@ y este proyecto se adhiere a [Semantic Versioning (SemVer)](https://semver.org/l
 
 ---
 
+## [0.0.6] - 2026-11-16
+
+### Added (Nuevas Funcionalidades)
+- **Selector de Tema Claro / Oscuro (`src/styles/global.css`, `tailwind.config.mjs`, `AppHeader.astro`):** Implementado sistema de tematización dinámica mediante variables CSS de canales RGB (`html.dark` / `html.light`) con botón conmutador en la barra superior y persistencia automática en almacenamiento local.
+- **Botón Oficial de GitHub en Barra Superior (`AppHeader.astro`, `src-tauri/src/commands.rs`):** Añadido acceso directo en el encabezado de la aplicación que abre `https://github.com/pacoMaldonado/chromaQR` en el navegador predeterminado del sistema operativo mediante comando nativo seguro sin argumentos (`open_repo_url`).
+
+### Fixed (Correcciones)
+- **Contraste del Selector de Presets & Plantillas en Linux (`PreviewPanel.astro`, `Select.astro`, `global.css`):**
+  - Reemplazado el `<select>` nativo de *Presets & Plantillas* por un componente desplegable personalizado 100% estilizado con el sistema de diseño (inmune al fondo blanco/gris del tema GTK en Fedora/Linux).
+  - Añadido `-webkit-appearance: none; appearance: none;` e icono vectorial adaptable a todos los selectores secundarios para evitar que WebKitGTK sobreescriba el fondo en Linux.
+
+---
+
 ## [0.0.5] - 2026-11-16
 
 ### Added (Firma Ad-Hoc en macOS & Metadatos de Editor)

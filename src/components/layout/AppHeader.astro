@@ -1,9 +1,9 @@
 ---
-import { QrCode, RotateCcw } from 'lucide-astro';
+import { QrCode, RotateCcw, Sun, Moon, Github } from 'lucide-astro';
 import Button from '../ui/Button.astro';
 ---
 
-<header class="h-13 px-5 py-2.5 border-b border-app-border bg-app-surface flex items-center justify-between shrink-0">
+<header class="h-13 px-5 py-2.5 border-b border-app-border bg-app-surface flex items-center justify-between shrink-0 transition-colors">
   <div class="flex items-center gap-2.5">
     <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-app-accent/25 to-app-success/20 border border-app-accent/40 flex items-center justify-center text-app-accent shadow-glow">
       <QrCode class="w-4 h-4" />
@@ -19,7 +19,31 @@ import Button from '../ui/Button.astro';
     </div>
   </div>
 
-  <div class="flex items-center gap-2">
+  <div class="flex items-center gap-1.5">
+    <!-- Botón de Cambio de Tema (Claro / Oscuro) -->
+    <Button
+      id="theme-toggle-btn"
+      variant="secondary"
+      size="sm"
+      title="Cambiar entre Tema Oscuro y Tema Claro"
+    >
+      <Sun id="theme-icon-sun" class="w-3.5 h-3.5 text-amber-400" />
+      <Moon id="theme-icon-moon" class="w-3.5 h-3.5 text-app-accent hidden" />
+      <span id="theme-toggle-label">Claro</span>
+    </Button>
+
+    <!-- Botón Oficial de GitHub -->
+    <Button
+      id="github-repo-btn"
+      variant="secondary"
+      size="sm"
+      title="Abrir repositorio oficial en GitHub (pacoMaldonado/chromaQR)"
+    >
+      <Github class="w-3.5 h-3.5" />
+      <span>GitHub</span>
+    </Button>
+
+    <!-- Botón de Restablecer -->
     <Button id="reset-all-btn" variant="ghost" size="sm" title="Restablecer valores por defecto">
       <RotateCcw class="w-3.5 h-3.5" />
       <span>Restablecer</span>
