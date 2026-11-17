@@ -11,6 +11,15 @@ y este proyecto se adhiere a [Semantic Versioning (SemVer)](https://semver.org/l
 
 ---
 
+## [0.0.5] - 2026-11-16
+
+### Added (Firma Ad-Hoc en macOS & Metadatos de Editor)
+- **Firma Criptográfica Ad-Hoc en macOS (`src-tauri/tauri.conf.json`):** Configurado `bundle.macOS.signingIdentity = "-"` y `minimumSystemVersion = "10.15"` para firmar el bundle Universal (`ChromaQR.app` y `.dmg`) mediante `codesign` en macOS, garantizando integridad de encabezados Mach-O en procesadores Apple Silicon (M1/M2/M3/M4).
+- **Metadatos de Autor y Editor (`publisher` y `copyright`):** Añadidos en `src-tauri/tauri.conf.json` para los instaladores `.msi`/`.exe` de Windows y `.dmg`/`.app` de macOS.
+- **Guía de Primera Ejecución para macOS Gatekeeper y Windows SmartScreen (`README.md` y `scripts/release.mjs`):** Añadidas instrucciones paso a paso en la documentación y en el pie automático de cada GitHub Release (`xattr -cr /Applications/ChromaQR.app` y *Privacidad y Seguridad → Abrir de todos modos*).
+
+---
+
 ## [0.0.4] - 2026-11-16
 
 ### Security (Endurecimiento Zero-Trust y Aislamiento)

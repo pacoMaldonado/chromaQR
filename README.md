@@ -39,33 +39,34 @@
 
 ---
 
-## Estructura del Proyecto
+## Instalación por Sistema Operativo
 
-Consulta la arquitectura detallada y los contratos de datos en [SPEC.md](./SPEC.md) y el desglose de hitos en [ROADMAP.md](./ROADMAP.md).
+Descarga el instalador para tu sistema desde la sección **[Releases](https://github.com/pacoMaldonado/chromaQR/releases)**:
 
-```text
-chromaQR/
-├── .github/workflows/release.yml  # CI/CD multiplataforma (Linux, macOS Universal, Windows)
-├── src/
-│   ├── components/                # Layout Split-Screen, 9 formularios, 5 acordeones y UI atómica
-│   ├── core/                      # Generadores QR, motor 60fps, validador WCAG, exportador y store
-│   ├── layouts/MainLayout.astro   # Shell de aplicación sin scroll global
-│   ├── pages/index.astro          # Punto de entrada principal
-│   ├── styles/global.css          # Tokens CSS, fuentes locales (Inter & JetBrains Mono)
-│   └── types/qr.ts                # Tipado estricto TypeScript
-└── src-tauri/                     # Backend Rust (Tauri v2), capabilities e iconos nativos
-```
+### 🐧 Linux (`.AppImage`, `.deb`, `.rpm`)
+- **Fedora / RHEL:** `sudo dnf install ./ChromaQR_*.rpm`
+- **Ubuntu / Debian:** `sudo apt install ./ChromaQR_*.deb`
+- **AppImage:** `chmod +x ChromaQR_*.AppImage && ./ChromaQR_*.AppImage`
+
+### 🍎 macOS (`.dmg` Universal — Apple Silicon & Intel)
+1. Abre el archivo `.dmg` y arrastra **ChromaQR.app** a tu carpeta **Aplicaciones (`/Applications`)**.
+2. Como ChromaQR es software libre (MIT) distribuido sin certificado comercial de pago de Apple ($99/año), macOS Gatekeeper mostrará un aviso la primera vez que lo abras. Puedes autorizarlo de cualquiera de estas **2 formas**:
+   - **Opción 1 — Vía Terminal (1 segundo, recomendada):**
+     Abre la Terminal y ejecuta:
+     ```bash
+     xattr -cr /Applications/ChromaQR.app
+     ```
+     *(Esto elimina la etiqueta de cuarentena del navegador `com.apple.quarantine` y permite abrir la app normalmente siempre).*
+   - **Opción 2 — Desde Configuración del Sistema (Sin Terminal):**
+     Intenta abrir `ChromaQR.app`, luego abre **Configuración del Sistema → Privacidad y Seguridad**, desplázate hacia abajo hasta la sección *Seguridad* donde dice *"Se bloqueó el uso de ChromaQR"* y haz clic en **"Abrir de todos modos"**.
+
+### 🪟 Windows (`.msi` / `.exe`)
+- Ejecuta el instalador `.exe` o `.msi`. Si aparece la ventana de *Windows SmartScreen*, haz clic en **"Más información"** y luego en **"Ejecutar de todas formas"**.
 
 ---
 
 ## Desarrollo y Compilación Local
 
-### Requisitos Previos
-- **Node.js** `>= 20` y `npm`
-- **Rust** (`rustup`, `cargo >= 1.77.2`)
-- Dependencias del sistema para Tauri v2 en Linux (`webkit2gtk4.1`, `librsvg2`, `libappindicator`, `patchelf`, `rpm-build`)
-
-### Comandos
 ```bash
 # 1. Instalar dependencias de frontend
 npm install
@@ -89,34 +90,16 @@ npm run tauri:build
 
 ChromaQR cuenta con un flujo automatizado de versionado ([Semantic Versioning](https://semver.org/lang/es/)) y registro de cambios ([CHANGELOG.md](./CHANGELOG.md) bajo el estándar *Keep a Changelog*).
 
-### 1. Generar una Nueva Versión y Actualizar `CHANGELOG.md`
-El script [scripts/release.mjs](./scripts/release.mjs) sincroniza automáticamente la versión en `package.json`, `src-tauri/Cargo.toml` y `src-tauri/tauri.conf.json`, y recopila los commits recientes dentro de [CHANGELOG.md](./CHANGELOG.md):
-
 ```bash
-# Incrementar versión Patch (ej. 0.0.1 -> 0.0.2 para correcciones)
+# Incrementar versión (patch | minor | major) y actualizar CHANGELOG.md
 npm run release:patch
 
-# Incrementar versión Minor (ej. 0.0.2 -> 0.1.0 para nuevas funcionalidades)
-npm run release:minor
-
-# Incrementar versión Major (ej. 0.1.0 -> 1.0.0 para cambios mayores)
-npm run release:major
-```
-
-### 2. Publicar el Tag para Disparar GitHub Actions
-El workflow [.github/workflows/release.yml](./.github/workflows/release.yml) se dispara automáticamente al subir un tag semántico (`v*.*.*`), extrae las notas de esa versión desde `CHANGELOG.md` y publica el **GitHub Release** con todos los instaladores:
-
-```bash
+# Confirmar y publicar tag para disparar GitHub Actions
 git add package.json src-tauri/Cargo.toml src-tauri/tauri.conf.json CHANGELOG.md
-git commit -m "chore(release): v0.0.2"
-git tag v0.0.2
+git commit -m "chore(release): v0.0.5"
+git tag v0.0.5
 git push origin main --tags
 ```
-
-GitHub Actions compila y adjunta automáticamente:
-- **Linux:** `.AppImage`, `.deb`, `.rpm`
-- **macOS:** `.dmg`, `.app` (Universal Binary: Apple Silicon + Intel)
-- **Windows:** `.msi`, `.exe` (NSIS)
 
 ---
 

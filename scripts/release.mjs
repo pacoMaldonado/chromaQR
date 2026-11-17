@@ -3,11 +3,11 @@
  * ChromaQR — Automated Version Bump & Changelog Generator
  *
  * Usage:
- *   npm run release:patch              # 0.0.2 -> 0.0.3
- *   npm run release:minor              # 0.0.2 -> 0.1.0
+ *   npm run release:patch              # 0.0.4 -> 0.0.5
+ *   npm run release:minor              # 0.0.4 -> 0.1.0
  *   npm run release:major              # 0.1.0 -> 1.0.0
  *   npm run release -- 1.2.0           # Explicit version
- *   node scripts/release.mjs --extract-notes v0.0.2
+ *   node scripts/release.mjs --extract-notes v0.0.5
  */
 
 import { execSync } from 'node:child_process';
@@ -23,10 +23,22 @@ const CARGO_PATH = path.join(ROOT, 'src-tauri', 'Cargo.toml');
 const TAURI_CONF_PATH = path.join(ROOT, 'src-tauri', 'tauri.conf.json');
 const CHANGELOG_PATH = path.join(ROOT, 'CHANGELOG.md');
 
+const INSTALL_FOOTER = `---
+### Instaladores Disponibles
+- **Linux:** \`.AppImage\`, \`.deb\`, \`.rpm\`
+- **macOS:** \`.dmg\`, \`.app\` (Universal Binary: Apple Silicon M1/M2/M3/M4 + Intel, con firma Ad-Hoc)
+- **Windows:** \`.msi\`, \`.exe\` (NSIS)
+
+### Nota de Primera Ejecución en macOS y Windows (Open Source sin Certificado Comercial)
+- **En macOS (Sequoia / Sonoma / Ventura):** Al ser software libre distribuido fuera de la Mac App Store sin membresía de pago de Apple Developer, tras arrastrar **ChromaQR.app** a \`/Applications\`, autorízalo en 1 paso:
+  - **Vía Terminal (Instantáneo):** Ejecuta \`xattr -cr /Applications/ChromaQR.app\` y ábrela normalmente.
+  - **Vía Interfaz Gráfica:** Intenta abrirla, luego ve a **Configuración del Sistema → Privacidad y Seguridad**, baja hasta el aviso de *ChromaQR* y haz clic en **"Abrir de todos modos"**.
+- **En Windows:** Si aparece el aviso de SmartScreen, haz clic en **"Más información" → "Ejecutar de todas formas"**.`;
+
 function extractReleaseNotes(tagOrVersion) {
   const cleanVer = tagOrVersion.replace(/^v/, '').trim();
   if (!fs.existsSync(CHANGELOG_PATH)) {
-    return `## ChromaQR v${cleanVer}\n\nLanzamiento multiplataforma oficial.`;
+    return `## ChromaQR v${cleanVer}\n\n${INSTALL_FOOTER}`;
   }
   const content = fs.readFileSync(CHANGELOG_PATH, 'utf8');
   const escaped = cleanVer.replace(/\./g, '\\.');
@@ -35,9 +47,9 @@ function extractReleaseNotes(tagOrVersion) {
   );
   const match = content.match(regex);
   if (match && match[1].trim()) {
-    return `${match[1].trim()}\n\n---\n### Instaladores Disponibles\n- **Linux:** \`.AppImage\`, \`.deb\`, \`.rpm\`\n- **macOS:** \`.dmg\`, \`.app\` (Universal Binary: Apple Silicon + Intel)\n- **Windows:** \`.msi\`, \`.exe\` (NSIS)`;
+    return `${match[1].trim()}\n\n${INSTALL_FOOTER}`;
   }
-  return `## ChromaQR v${cleanVer}\n\nConsulta el historial completo en [CHANGELOG.md](https://github.com/pacoMaldonado/chromaQR/blob/main/CHANGELOG.md).`;
+  return `## ChromaQR v${cleanVer}\n\nConsulta el historial completo en [CHANGELOG.md](https://github.com/pacoMaldonado/chromaQR/blob/main/CHANGELOG.md).\n\n${INSTALL_FOOTER}`;
 }
 
 function bumpSemver(current, typeOrExplicit) {
@@ -127,7 +139,7 @@ function main() {
   const args = process.argv.slice(2);
 
   if (args[0] === '--extract-notes') {
-    const targetVer = args[1] || '0.0.2';
+    const targetVer = args[1] || '0.0.5';
     process.stdout.write(extractReleaseNotes(targetVer));
     return;
   }
