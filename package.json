@@ -1,6 +1,6 @@
 {
   "name": "chromaqr",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "private": true,
   "type": "module",
   "description": "High-performance cross-platform desktop QR code generator & designer built with Tauri v2 and Astro",

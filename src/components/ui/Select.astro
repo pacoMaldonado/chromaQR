@@ -33,12 +33,12 @@ const {
     id={id}
     name={id}
     class:list={[
-      'w-full h-9 px-3 rounded-lg bg-app-elevated border border-app-border text-xs text-app-text transition-colors focus-ring cursor-pointer',
+      'w-full h-9 px-3 rounded-lg bg-app-elevated border border-app-border text-xs text-app-text transition-colors focus-ring cursor-pointer appearance-none',
       mono ? 'font-mono' : 'font-sans',
     ]}
   >
     {options.map((opt) => (
-      <option value={opt.value} selected={opt.value === value} class="bg-app-surface text-app-text">
+      <option value={opt.value} selected={opt.value === value}>
         {opt.label}
       </option>
     ))}
