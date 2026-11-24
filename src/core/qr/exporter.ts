@@ -2,6 +2,7 @@ import { Image as TauriImage } from '@tauri-apps/api/image';
 import { writeImage } from '@tauri-apps/plugin-clipboard-manager';
 import { save } from '@tauri-apps/plugin-dialog';
 import { writeFile } from '@tauri-apps/plugin-fs';
+import { canShare, share } from '@vnidrop/tauri-plugin-share';
 import { jsPDF } from 'jspdf';
 import type { PayloadType, QRStyleConfig } from '../../types/qr';
 import { showToast } from '../ui/toast';
@@ -11,6 +12,11 @@ export type ExportFormat = 'png' | 'svg' | 'webp' | 'pdf';
 
 function isTauriRuntime(): boolean {
   return typeof window !== 'undefined' && '__TAURI_INTERNALS__' in window;
+}
+
+export function isMobilePlatform(): boolean {
+  if (typeof navigator === 'undefined') return false;
+  return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 }
 
 async function blobToUint8Array(raw: unknown): Promise<Uint8Array> {
@@ -119,6 +125,53 @@ export async function copyQrToClipboard(
   }
 }
 
+export async function shareQrImage(
+  activeTab: PayloadType,
+  rawPayload: string,
+  style: QRStyleConfig
+): Promise<void> {
+  try {
+    const qrInstance = liveQrRenderer.createExportInstance(rawPayload, style, 'canvas');
+    const raw = await qrInstance.getRawData('png');
+    const bytes = await blobToUint8Array(raw);
+    const filename = `chromaqr-${activeTab}-${style.technical.size}px.png`;
+    const file = new File([bytes.buffer as ArrayBuffer], filename, { type: 'image/png' });
+
+    if (isTauriRuntime()) {
+      const supported = await canShare({ files: [file] });
+      if (supported) {
+        await share({
+          title: 'ChromaQR',
+          text: 'Código QR generado con ChromaQR',
+          files: [file],
+        });
+        return;
+      }
+    }
+
+    if (typeof navigator !== 'undefined' && navigator.share) {
+      const shareData: ShareData = {
+        title: 'ChromaQR',
+        text: 'Código QR generado con ChromaQR',
+        files: [file],
+      };
+      if (!navigator.canShare || navigator.canShare(shareData)) {
+        await navigator.share(shareData);
+        return;
+      }
+    }
+
+    showToast('Compartir no está disponible en este dispositivo', 'warning');
+  } catch (err) {
+    // Ignore user cancellation on native share sheet
+    if (err instanceof Error && /cancel|abort/i.test(err.message)) {
+      return;
+    }
+    console.error('Share QR failed:', err);
+    showToast('No se pudo compartir la imagen QR', 'warning');
+  }
+}
+
 export async function exportQrToFile(
   format: ExportFormat,
   activeTab: PayloadType,
@@ -157,20 +210,36 @@ export async function exportQrToFile(
     const defaultFilename = `chromaqr-${activeTab}-${style.technical.size}px.${format}`;
 
     if (isTauriRuntime()) {
-      const filePath = await save({
-        title: `Exportar Código QR (${format.toUpperCase()})`,
-        defaultPath: defaultFilename,
-        filters: [{ name: filterName, extensions: [format] }],
-      });
+      try {
+        const filePath = await save({
+          title: `Exportar Código QR (${format.toUpperCase()})`,
+          defaultPath: defaultFilename,
+          filters: [{ name: filterName, extensions: [format] }],
+        });
 
-      if (!filePath) {
-        return; // User cancelled dialog
+        if (!filePath) {
+          return; // User cancelled dialog
+        }
+
+        // Write exclusively to the user-authorized path from the native Save dialog
+        await writeFile(filePath, bytes);
+        showToast(`Exportado como ${format.toUpperCase()} correctamente`, 'success');
+        return;
+      } catch (nativeErr) {
+        // On Android, if SAF save fails on a specific device/ROM, fall back to native Share Sheet
+        if (isMobilePlatform()) {
+          console.warn('Mobile save dialog failed, falling back to native share:', nativeErr);
+          const file = new File([bytes.buffer as ArrayBuffer], defaultFilename, { type: mimeType });
+          if (await canShare({ files: [file] })) {
+            await share({
+              title: `ChromaQR (${format.toUpperCase()})`,
+              files: [file],
+            });
+            return;
+          }
+        }
+        throw nativeErr;
       }
-
-      // Write exclusively to the user-authorized path from the native Save dialog
-      await writeFile(filePath, bytes);
-      showToast(`Exportado como ${format.toUpperCase()} correctamente`, 'success');
-      return;
     }
 
     // Browser download fallback for dev mode

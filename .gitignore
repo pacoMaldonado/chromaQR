@@ -8,8 +8,15 @@ dist/
 
 # Rust / Tauri build output
 src-tauri/target/
-src-tauri/gen/
+src-tauri/gen/schemas/
+src-tauri/gen/apple/
 src-tauri/WixTools/
+
+# Android signing secrets (NEVER commit)
+*.jks
+*.keystore
+keystore.properties
+src-tauri/gen/android/keystore.properties
 
 # Environment variables
 .env

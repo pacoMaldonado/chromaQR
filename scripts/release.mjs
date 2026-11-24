@@ -28,8 +28,10 @@ const INSTALL_FOOTER = `---
 - **Linux:** \`.AppImage\`, \`.deb\`, \`.rpm\`
 - **macOS:** \`.dmg\`, \`.app\` (Universal Binary: Apple Silicon M1/M2/M3/M4 + Intel, con firma Ad-Hoc)
 - **Windows:** \`.msi\`, \`.exe\` (NSIS)
+- **Android:** \`.apk\` (instalación directa) y \`.aab\` (Android App Bundle para Google Play)
 
-### Nota de Primera Ejecución en macOS y Windows (Open Source sin Certificado Comercial)
+### Nota de Primera Ejecución en macOS, Windows y Android (Open Source sin Certificado Comercial)
+- **En Android:** Descarga el archivo \`.apk\`, ábrelo desde tu gestor de archivos y autoriza **"Instalar apps desconocidas"** si Android lo solicita.
 - **En macOS (Sequoia / Sonoma / Ventura):** Al ser software libre distribuido fuera de la Mac App Store sin membresía de pago de Apple Developer, tras arrastrar **ChromaQR.app** a \`/Applications\`, autorízalo en 1 paso:
   - **Vía Terminal (Instantáneo):** Ejecuta \`xattr -cr /Applications/ChromaQR.app\` y ábrela normalmente.
   - **Vía Interfaz Gráfica:** Intenta abrirla, luego ve a **Configuración del Sistema → Privacidad y Seguridad**, baja hasta el aviso de *ChromaQR* y haz clic en **"Abrir de todos modos"**.
@@ -135,8 +137,49 @@ function buildChangelogSection(newVersion, commits) {
   return blocks.join('\n\n');
 }
 
+function checkVersionSync(expectedTag) {
+  const pkg = JSON.parse(fs.readFileSync(PKG_PATH, 'utf8'));
+  const tauriConf = JSON.parse(fs.readFileSync(TAURI_CONF_PATH, 'utf8'));
+  const cargoToml = fs.readFileSync(CARGO_PATH, 'utf8');
+  const cargoMatch = cargoToml.match(/^version\s*=\s*"([^"]+)"/m);
+  const cargoVersion = cargoMatch ? cargoMatch[1] : null;
+
+  const versions = {
+    'package.json': pkg.version,
+    'src-tauri/tauri.conf.json': tauriConf.version,
+    'src-tauri/Cargo.toml': cargoVersion,
+  };
+
+  const unique = new Set(Object.values(versions));
+  if (unique.size !== 1 || !pkg.version) {
+    console.error('❌ Desfase de versiones entre archivos del proyecto:');
+    for (const [file, ver] of Object.entries(versions)) {
+      console.error(`   • ${file}: ${ver ?? '(no encontrada)'}`);
+    }
+    process.exit(1);
+  }
+
+  if (expectedTag && /^v\d+\.\d+\.\d+/.test(expectedTag)) {
+    const cleanTag = expectedTag.replace(/^v/, '').trim();
+    if (cleanTag !== pkg.version) {
+      console.error(
+        `❌ El tag de Git (${expectedTag}) no coincide con la versión del proyecto (v${pkg.version}).`
+      );
+      console.error('   Ejecuta "npm run release:minor" (o patch/major) antes de crear el tag.');
+      process.exit(1);
+    }
+  }
+
+  console.log(`✅ Versiones sincronizadas: v${pkg.version}${expectedTag ? ` (tag ${expectedTag})` : ''}`);
+}
+
 function main() {
   const args = process.argv.slice(2);
+
+  if (args[0] === '--check') {
+    checkVersionSync(args[1]);
+    return;
+  }
 
   if (args[0] === '--extract-notes') {
     const targetVer = args[1] || '0.0.5';

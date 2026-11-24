@@ -1,6 +1,6 @@
 {
   "name": "chromaqr",
-  "version": "0.0.6",
+  "version": "0.1.0",
   "private": true,
   "type": "module",
   "description": "High-performance cross-platform desktop QR code generator & designer built with Tauri v2 and Astro",
@@ -26,6 +26,8 @@
     "@tauri-apps/plugin-clipboard-manager": "^2.2.0",
     "@tauri-apps/plugin-dialog": "^2.2.0",
     "@tauri-apps/plugin-fs": "^2.2.0",
+    "@tauri-apps/plugin-opener": "^2.7.3",
+    "@vnidrop/tauri-plugin-share": "^1.0.0-rc.2",
     "astro": "^5.1.1",
     "jspdf": "^2.5.2",
     "lucide-astro": "^0.468.0",
