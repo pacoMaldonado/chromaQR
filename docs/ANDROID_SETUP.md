@@ -90,9 +90,10 @@ Android exige que todo `.apk` o `.aab` de producción esté firmado con un archi
    ```
 
 ### Firma automática en GitHub Actions (CI/CD)
-1. Codifica tu `.jks` en Base64:
+1. Codifica tu `.jks` en Base64 y cópialo directo al portapapeles (evita cortes o saltos de línea al seleccionar en la terminal):
    ```bash
-   base64 -w 0 ~/chromaqr-release.jks
+   # Wayland (Fedora KDE/GNOME)
+   base64 -w 0 ~/chromaqr-release.jks | wl-copy
    ```
 2. En GitHub ve a **Settings → Secrets and variables → Actions** y configura estos 3 secretos:
    | Secret | Contenido |
@@ -101,4 +102,27 @@ Android exige que todo `.apk` o `.aab` de producción esté firmado con un archi
    | `ANDROID_KEY_PASSWORD` | Contraseña del keystore y de la llave |
    | `ANDROID_KEY_ALIAS` | `chromaqr` |
 
-Al publicar un tag `vX.Y.Z`, el workflow `.github/workflows/release.yml` reconstruye el keystore temporalmente en memoria del runner, firma tanto el `.apk` universal como el `.aab` y los adjunta al Release de GitHub.
+Al publicar un tag `vX.Y.Z`, el workflow `.github/workflows/release.yml`:
+- Valida con `node scripts/release.mjs --check` que el tag coincida con `package.json`, `Cargo.toml` y `tauri.conf.json`.
+- Usa el `sdkmanager` preinstalado en el runner `ubuntu-22.04` (sin acciones de terceros obsoletas) para instalar API 36, Build-Tools y NDK.
+- Reconstruye el keystore limpiando espacios (`tr -d '[:space:]' | base64 --decode`), compila y firma tanto el `.apk` universal como el `.aab` y los adjunta al Release de GitHub.
+
+---
+
+## 4. Cómo Liberar una Nueva Versión en el Futuro
+
+```bash
+# 1. Subir versión (patch | minor | major) y actualizar CHANGELOG.md
+npm run release:patch   # o release:minor / release:major
+
+# 2. Verificar que las versiones coincidan
+node scripts/release.mjs --check
+
+# 3. Commitear, taguear y subir
+git add -A
+git commit -m "chore(release): vX.Y.Z"
+git tag vX.Y.Z
+git push origin main --tags
+```
+
+> **Tip:** Si alguna vez necesitas re-ejecutar el pipeline sobre la versión actual sin crear un tag nuevo, en GitHub ve a **Actions → Release Multiplatform Binaries → Run workflow** (rama `main`); reutilizará el Release existente y actualizará los binarios con `--clobber`.

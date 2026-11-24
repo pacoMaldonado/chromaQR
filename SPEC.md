@@ -1,7 +1,8 @@
 # ChromaQR — Especificación Técnica y de Diseño (SPEC)
 
-> **Versión:** 1.0.0  
-> **Identificador de Aplicación:** `com.chromaqr.app`  
+> **Versión vigente:** `0.1.0`  
+> **Identificador de Aplicación:** `com.chromaqr.desktop`  
+> **Plataformas:** Linux, macOS, Windows y Android (`.apk` / `.aab`)  
 > **Licencia:** MIT  
 > **Metodología:** Spec-Driven Development (SDD)
 
@@ -9,11 +10,11 @@
 
 ## 1. Visión del Producto y Principios Arquitectónicos
 
-**ChromaQR** es una aplicación de escritorio multiplataforma (Linux, macOS y Windows) de alto rendimiento y huella mínima de memoria para la generación, personalización estética avanzada y validación de códigos QR.
+**ChromaQR** es una aplicación multiplataforma (Linux, macOS, Windows y Android) de alto rendimiento y huella mínima de memoria para la generación, personalización estética avanzada y validación de códigos QR.
 
 ### Principios Rectores
 1. **Rendimiento Nativo y Huella Mínima:** Construida sobre **Tauri v2** (Rust) y un frontend estático compilado con **Astro** (`output: 'static'`) + **TypeScript puro**, evitando el sobrecoste de Virtual DOM pesados y logrando tiempos de arranque instantáneos (< 200 ms) y consumo de RAM mínimo.
-2. **Estética Profesional (Linear / Raycast Design Language):** Interfaz *Dark Mode First*, bordes de precisión de `1px`, tipografía técnica monoespaciada para payloads y previsualización interactiva a **60fps** en diseño de pantalla dividida (*Split-Screen*) sin scroll global.
+2. **Estética Profesional (Linear / Raycast Design Language) + App Móvil Nativa:** Interfaz *Dark / Light Mode*, bordes de precisión de `1px`, tipografía técnica monoespaciada para payloads y previsualización interactiva a **60fps** en diseño *Split-Screen* en escritorio (`≥ 1024px`) y barra de pestañas inferiores (**Contenido / Diseño / Vista previa**) en Android (`< 1024px`).
 3. **Escaneabilidad Garantizada (UX Pro):** Motor de análisis óptico en tiempo real que calcula el ratio de contraste WCAG 2.1, detecta inversión polar (fondo oscuro con módulos claros), evalúa la cobertura del logo central frente al nivel de corrección de errores (`L`, `M`, `Q`, `H`) y alerta sobre excesos de densidad binaria.
 4. **Privacidad y Operación 100% Offline:** Todos los payloads, imágenes y presets se procesan y almacenan localmente sin telemetría ni llamadas a servidores externos.
 
@@ -23,13 +24,13 @@
 
 | Capa | Tecnología | Justificación Técnica |
 | :--- | :--- | :--- |
-| **Runtime de Escritorio** | **Tauri v2** (Rust Edition 2021) | Acceso seguro al sistema operativo (`fs`, `dialog`, `clipboard-manager`) mediante sistema de *Capabilities* granulares. |
-| **Frontend Base** | **Astro 5** (`output: 'static'`) | Compilación HTML/CSS de cero JS innecesario, estructuración modular de componentes UI. |
+| **Runtime Multiplataforma** | **Tauri v2** (Rust Edition 2021) | Acceso seguro al sistema operativo (`fs`, `dialog`, `clipboard-manager`, `opener`, `vnidrop-share`) mediante *Capabilities* Zero-Trust separadas (`desktop.json` y `mobile.json`). |
+| **Frontend Base** | **Astro 5** (`output: 'static'`) | Compilación HTML/CSS de cero JS innecesario, estructuración modular de componentes UI e inyección de `__APP_VERSION__` desde `package.json`. |
 | **Estado y Reactividad** | **TypeScript Estricto** (`Nano-Store` / `EventTarget` reactivo) | Estado reactivo centralizado con suscripciones granulares sin *re-renders* costosos, manteniendo 60fps en el lienzo QR. |
-| **Estilos** | **Tailwind CSS** + Variables CSS Nativas | Tokens de diseño consistentes, utilidades de precisión y soporte nativo de temas. |
+| **Estilos** | **Tailwind CSS** + Variables CSS Nativas | Tokens de diseño consistentes, soporte Claro/Oscuro y *safe-areas* móviles (`100dvh`, `viewport-fit=cover`). |
 | **Motor de Renderizado QR** | `qr-code-styling` + `jspdf` / generador PDF vectorial | Renderizado híbrido SVG/Canvas con soporte para formas personalizadas de puntos, esquinas independientes, gradientes lineales/radiales y logos embebidos. |
 | **Iconografía** | `lucide-astro` / `lucide-static` | Iconos vectoriales limpios con trazo uniforme (`stroke-width: 1.75px`). |
-| **Empaquetado & CI/CD** | `tauri-action` (GitHub Actions) | Compilación cruzada automatizada para Linux (`.AppImage`, `.deb`, `.rpm`), macOS (`.dmg`, `.app`) y Windows (`.msi`, `.exe`). |
+| **Empaquetado & CI/CD** | `tauri-action` + Gradle Android (GitHub Actions) | Compilación automatizada para Linux (`.AppImage`, `.deb`, `.rpm`), macOS (`.dmg`, `.app`), Windows (`.msi`, `.exe`) y Android (`.apk`, `.aab` firmados). |
 
 ---
 

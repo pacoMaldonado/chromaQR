@@ -139,3 +139,30 @@
 #### Criterio de Aceptación (DoD):
 * `tauri.conf.json`, `Cargo.toml` y `.github/workflows/release.yml` validados sin errores.
 * Compilación de verificación completa en Linux exitosa.
+
+---
+
+### Hito 7: Soporte Android (APK / AAB), Interfaz Móvil y Versión Visible (`v0.1.0`)
+**Objetivo:** Llevar ChromaQR a teléfonos Android con experiencia nativa de app móvil (pestañas inferiores y menú nativo Compartir), mostrar la versión de la app sincronizada con Git y publicar `.apk` y `.aab` firmados automáticamente en cada release.
+
+#### Tareas Ejecutables:
+1. **Versión visible + candado de sincronización:**
+   * Inyectar `__APP_VERSION__` desde `package.json` en `astro.config.mjs` (`vite.define`) y declararlo en `src/env.d.ts`.
+   * Mostrar badge interactivo `vX.Y.Z` en `AppHeader.astro` que abre las notas del release en GitHub.
+   * Agregar `node scripts/release.mjs --check [tag]` y validarlo al inicio de `.github/workflows/release.yml` (`create-release`).
+2. **Backend y Capabilities por plataforma (Zero-Trust):**
+   * Separar `src-tauri/capabilities/desktop.json` y `src-tauri/capabilities/mobile.json`.
+   * Migrar `open_repo_url` a `tauri-plugin-opener` con scope exclusivo a `https://github.com/pacoMaldonado/chromaQR*`, eliminando `std::process::Command`.
+   * Integrar `tauri-plugin-vnidrop-share` (`@vnidrop/tauri-plugin-share`) para abrir el Share Sheet nativo de Android (WhatsApp, Mensajes, Bluetooth, etc.) y servir como respaldo automático si el diálogo de guardado falla.
+3. **Interfaz móvil nativa (`< 1024px`) sin alterar escritorio (`≥ 1024px`):**
+   * Crear `MobileBottomNav.astro` con 3 pestañas (**Contenido / Diseño / Vista previa**).
+   * Migrar el shell en `index.astro` a CSS Grid con `100dvh`, `viewport-fit=cover`, *safe-areas* (`.pt-safe`, `.pb-safe`), controles táctiles y `16px` en inputs móviles.
+4. **Proyecto Android, firma y CI/CD:**
+   * Inicializar `src-tauri/gen/android` (`npx tauri android init`), generar mipmaps adaptativos (`npx tauri icon`), fijar `compileSdk`/`targetSdk = 36` y configurar `signingConfigs` leyendo `keystore.properties` (ignorado en `.gitignore`).
+   * Agregar job `publish-android` en `.github/workflows/release.yml` usando el `sdkmanager` preinstalado del runner y los 3 secretos (`ANDROID_KEY_BASE64`, `ANDROID_KEY_PASSWORD`, `ANDROID_KEY_ALIAS`) para publicar `ChromaQR_X.Y.Z_android_universal.apk` y `ChromaQR_X.Y.Z_android_universal.aab`.
+   * Documentar todo el proceso de entorno local, keystore y CI en `docs/ANDROID_SETUP.md`.
+
+#### Criterio de Aceptación (DoD):
+* ✅ `node scripts/release.mjs --check v0.1.0` y `npm run build` pasan con 0 errores.
+* ✅ APK y AAB firmados generados por GitHub Actions y adjuntos al release `v0.1.0`.
+* ✅ APK descargado del release e instalado y verificado en un teléfono Android real.
