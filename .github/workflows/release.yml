@@ -15,7 +15,68 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
 
 jobs:
+  # 1. Validar que el tag de Git coincida con package.json, Cargo.toml y tauri.conf.json
+  #    y crear un único GitHub Release para evitar carreras entre Desktop y Android.
+  create-release:
+    runs-on: ubuntu-22.04
+    outputs:
+      release_id: ${{ steps.create.outputs.release_id }}
+      tag_name: ${{ steps.meta.outputs.tag_name }}
+      version: ${{ steps.meta.outputs.version }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Verify version sync (tag <-> package.json <-> Cargo.toml <-> tauri.conf.json)
+        id: meta
+        shell: bash
+        run: |
+          if [[ "${{ github.ref_type }}" == "tag" ]]; then
+            node scripts/release.mjs --check "${{ github.ref_name }}"
+            TAG="${{ github.ref_name }}"
+          else
+            node scripts/release.mjs --check
+            VER="$(node -p "require('./package.json').version")"
+            TAG="v${VER}"
+          fi
+          echo "tag_name=${TAG}" >> "$GITHUB_OUTPUT"
+          echo "version=${TAG#v}" >> "$GITHUB_OUTPUT"
+
+      - name: Extract Release Notes from CHANGELOG.md
+        id: notes
+        shell: bash
+        run: |
+          EOF_MARKER="CHANGELOG_EOF_MARKER"
+          echo "body<<$EOF_MARKER" >> "$GITHUB_OUTPUT"
+          node scripts/release.mjs --extract-notes "${{ steps.meta.outputs.tag_name }}" >> "$GITHUB_OUTPUT"
+          echo "" >> "$GITHUB_OUTPUT"
+          echo "$EOF_MARKER" >> "$GITHUB_OUTPUT"
+
+      - name: Create or get GitHub Release
+        id: create
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ steps.meta.outputs.tag_name }}
+          RELEASE_BODY: ${{ steps.notes.outputs.body }}
+        run: |
+          if ! gh release view "$TAG" >/dev/null 2>&1; then
+            gh release create "$TAG" \
+              --title "ChromaQR ${TAG}" \
+              --notes "$RELEASE_BODY"
+          fi
+          RELEASE_ID="$(gh api "repos/${{ github.repository }}/releases/tags/${TAG}" --jq '.id')"
+          echo "release_id=${RELEASE_ID}" >> "$GITHUB_OUTPUT"
+
+  # 2. Compilar instaladores de Escritorio (Linux, macOS Universal, Windows)
   publish-tauri:
+    needs: create-release
     strategy:
       fail-fast: false
       matrix:
@@ -35,7 +96,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Install Linux system dependencies (WebKitGTK 4.1, AppImage FUSE2, RPM)
+      - name: Install Linux system dependencies (WebKitGTK 4.1, D-Bus, AppImage FUSE2, RPM)
         if: matrix.platform == 'ubuntu-22.04'
         run: |
           sudo apt-get update
@@ -43,6 +104,7 @@ jobs:
             libwebkit2gtk-4.1-dev \
             libjavascriptcoregtk-4.1-dev \
             libappindicator3-dev \
+            libdbus-1-dev \
             librsvg2-dev \
             libfuse2 \
             patchelf \
@@ -76,24 +138,101 @@ jobs:
       - name: Verify frontend static build
         run: npm run build
 
-      - name: Extract Release Notes from CHANGELOG.md
-        id: notes
-        shell: bash
-        run: |
-          EOF_MARKER="CHANGELOG_EOF_MARKER"
-          echo "body<<$EOF_MARKER" >> "$GITHUB_OUTPUT"
-          node scripts/release.mjs --extract-notes "${{ github.ref_name }}" >> "$GITHUB_OUTPUT"
-          echo "" >> "$GITHUB_OUTPUT"
-          echo "$EOF_MARKER" >> "$GITHUB_OUTPUT"
-
-      - name: Build and publish Tauri v2 installers
+      - name: Build and upload Tauri v2 desktop installers
         uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tagName: ${{ github.ref_name }}
-          releaseName: 'ChromaQR ${{ github.ref_name }}'
-          releaseBody: ${{ steps.notes.outputs.body }}
-          releaseDraft: false
-          prerelease: false
+          releaseId: ${{ needs.create-release.outputs.release_id }}
           args: ${{ matrix.args }}
+
+  # 3. Compilar Android (.apk universal + .aab para Google Play)
+  publish-android:
+    needs: create-release
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Setup Java 17 (required by Android Gradle Plugin)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'gradle'
+
+      - name: Setup Android SDK & NDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android NDK and Build Tools
+        run: |
+          yes | sdkmanager --licenses >/dev/null 2>&1 || true
+          sdkmanager "platform-tools" "platforms;android-36" "build-tools;36.0.0" "ndk;27.2.12479018"
+          echo "NDK_HOME=${ANDROID_HOME}/ndk/27.2.12479018" >> "$GITHUB_ENV"
+
+      - name: Setup Rust stable + Android targets
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-linux-android,armv7-linux-androideabi,i686-linux-android,x86_64-linux-android
+
+      - name: Rust Cargo cache
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: './src-tauri -> target'
+          key: android
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Build frontend static bundle
+        run: npm run build
+
+      - name: Configure Android Release Keystore (if secrets are configured)
+        env:
+          ANDROID_KEY_BASE64: ${{ secrets.ANDROID_KEY_BASE64 }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+        run: |
+          if [ -n "$ANDROID_KEY_BASE64" ]; then
+            echo "$ANDROID_KEY_BASE64" | base64 --decode > src-tauri/gen/android/chromaqr-release.jks
+            cat <<EOF > src-tauri/gen/android/keystore.properties
+          password=${ANDROID_KEY_PASSWORD}
+          keyAlias=${ANDROID_KEY_ALIAS}
+          storeFile=chromaqr-release.jks
+          EOF
+            echo "✅ Android release keystore configured."
+          else
+            echo "⚠️ ANDROID_KEY_BASE64 secret not set — APK/AAB will be built unsigned."
+          fi
+
+      - name: Build Android APK and AAB
+        run: |
+          npx tauri android build --apk --aab
+
+      - name: Upload Android APK and AAB to GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ needs.create-release.outputs.tag_name }}
+          VER: ${{ needs.create-release.outputs.version }}
+        run: |
+          APK_PATH="$(find src-tauri/gen/android/app/build/outputs/apk/universal/release -name '*.apk' | head -n 1)"
+          AAB_PATH="$(find src-tauri/gen/android/app/build/outputs/bundle/universalRelease -name '*.aab' | head -n 1)"
+
+          if [ -n "$APK_PATH" ]; then
+            cp "$APK_PATH" "ChromaQR_${VER}_android_universal.apk"
+            gh release upload "$TAG" "ChromaQR_${VER}_android_universal.apk" --clobber
+          fi
+
+          if [ -n "$AAB_PATH" ]; then
+            cp "$AAB_PATH" "ChromaQR_${VER}_android_universal.aab"
+            gh release upload "$TAG" "ChromaQR_${VER}_android_universal.aab" --clobber
+          fi

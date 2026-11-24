@@ -1,0 +1,25 @@
+{
+  "$schema": "../gen/schemas/mobile-schema.json",
+  "identifier": "mobile",
+  "description": "Zero-Trust minimal capabilities for ChromaQR Mobile (Android/iOS): save dialog, isolated AppData presets, native Share Sheet, and scoped GitHub URL opener",
+  "platforms": ["android", "iOS"],
+  "windows": ["main"],
+  "permissions": [
+    "core:default",
+    "dialog:allow-save",
+    "fs:allow-write-file",
+    "fs:allow-read-text-file",
+    "fs:allow-write-text-file",
+    "fs:allow-exists",
+    "fs:allow-mkdir",
+    "fs:scope-appdata-recursive",
+    "vnidrop-share:default",
+    {
+      "identifier": "opener:allow-open-url",
+      "allow": [
+        { "url": "https://github.com/pacoMaldonado/chromaQR" },
+        { "url": "https://github.com/pacoMaldonado/chromaQR/**" }
+      ]
+    }
+  ]
+}

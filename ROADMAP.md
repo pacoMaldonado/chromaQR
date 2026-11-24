@@ -1,7 +1,7 @@
 # ChromaQR — Plan Maestro de Trabajo y Hoja de Ruta (ROADMAP)
 
 > **Enfoque:** Desarrollo Iterativo Guiado por Especificaciones (*Spec-Driven Development*)  
-> **Total de Hitos:** 6 Hitos Ejecutables y Verificables
+> **Total de Hitos:** 7 Hitos Ejecutables y Verificables
 
 ---
 
@@ -15,6 +15,7 @@
 | **Hito 4** | **Motor de Diseño QR y Escaneabilidad** | Integrar `qr-code-styling` a 60fps, puntos, esquinas, gradientes, logo y validador de contraste. | ✅ Completado |
 | **Hito 5** | **Integración Nativa Tauri v2 (Export & Presets)** | Exportación nativa a PNG/SVG/WEBP/PDF, copiado de imagen al portapapeles y presets en disco. | ✅ Completado |
 | **Hito 6** | **Optimización de Binarios y CI/CD Release** | Configurar `Cargo.toml` (LTO/strip), iconos multiplataforma y workflow de GitHub Actions. | ✅ Completado |
+| **Hito 7** | **Soporte Android (APK/AAB) y Versión en UI** | Badge de versión sincronizado con Git, `opener` + Share nativo, UI móvil con pestañas inferiores y CI Android. | ✅ Completado |
 
 ---
 

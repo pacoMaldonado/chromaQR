@@ -1,17 +1,31 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
+import AppHeader from '../components/layout/AppHeader.astro';
 import ConfigPanel from '../components/layout/ConfigPanel.astro';
 import PreviewPanel from '../components/layout/PreviewPanel.astro';
+import MobileBottomNav from '../components/layout/MobileBottomNav.astro';
 import Toast from '../components/ui/Toast.astro';
 ---
 
 <MainLayout title="ChromaQR — Generador y Diseñador QR">
-  <main class="flex-1 flex h-screen w-screen overflow-hidden bg-app-bg">
-    <!-- Columna Izquierda (60%): Configuración de Payload y Acordeones de Diseño -->
+  <main
+    id="app-main-shell"
+    data-mobile-tab="content"
+    class="flex-1 grid grid-cols-1 grid-rows-[auto_1fr_auto] lg:grid-cols-[60%_40%] lg:grid-rows-[auto_1fr] h-[100dvh] w-screen overflow-hidden bg-app-bg"
+  >
+    <!-- Encabezado (Fila 1 Col 1 en escritorio y móvil) -->
+    <div class="col-start-1 row-start-1 lg:border-r lg:border-app-border min-w-0">
+      <AppHeader />
+    </div>
+
+    <!-- Columna Izquierda (60% en escritorio / Pestañas Contenido y Diseño en móvil) -->
     <ConfigPanel />
 
-    <!-- Columna Derecha (40%): Live Preview 60fps, Indicador de Escaneabilidad y Exportación -->
+    <!-- Columna Derecha (40% en escritorio / Pestaña Vista Previa en móvil) -->
     <PreviewPanel />
+
+    <!-- Barra de Pestañas Inferior (Solo Móvil < 1024px) -->
+    <MobileBottomNav />
   </main>
 
   <!-- Sistema de Notificaciones Flotantes (Toast) -->
@@ -97,6 +111,40 @@ import Toast from '../components/ui/Toast.astro';
       bindTogglePanel('dots-gradient-toggle', 'dots-gradient-panel', 'block');
       bindTogglePanel('bg-gradient-toggle', 'bg-gradient-panel', 'block');
       bindTogglePanel('bg-transparent-toggle', 'bg-color-controls', 'block', true);
+
+      // 5. Mobile Bottom Tab Navigation (< 1024px)
+      const mainShell = document.getElementById('app-main-shell');
+      const mobileNavBtns = document.querySelectorAll<HTMLButtonElement>('[data-mobile-nav-btn]');
+      const setMobileTab = (tab: 'content' | 'design' | 'preview') => {
+        if (!mainShell) return;
+        mainShell.setAttribute('data-mobile-tab', tab);
+
+        mobileNavBtns.forEach((btn) => {
+          const isActive = btn.getAttribute('data-mobile-nav-btn') === tab;
+          btn.classList.toggle('text-app-accent', isActive);
+          btn.classList.toggle('text-app-muted', !isActive);
+          if (isActive) {
+            btn.setAttribute('aria-current', 'page');
+          } else {
+            btn.removeAttribute('aria-current');
+          }
+
+          const pill = btn.querySelector<HTMLElement>('.mobile-nav-pill');
+          pill?.classList.toggle('bg-app-accent/15', isActive);
+          pill?.classList.toggle('bg-transparent', !isActive);
+
+          const label = btn.querySelector<HTMLElement>('span:last-child');
+          label?.classList.toggle('font-semibold', isActive);
+          label?.classList.toggle('font-medium', !isActive);
+        });
+      };
+
+      mobileNavBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const tab = btn.getAttribute('data-mobile-nav-btn') as 'content' | 'design' | 'preview' | null;
+          if (tab) setMobileTab(tab);
+        });
+      });
     }
 
     document.addEventListener('DOMContentLoaded', () => {

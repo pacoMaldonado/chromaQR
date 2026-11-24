@@ -1,0 +1,45 @@
+---
+import { FileText, Palette, QrCode } from 'lucide-astro';
+---
+
+<nav
+  id="mobile-bottom-nav"
+  aria-label="Navegación principal"
+  class="lg:hidden col-start-1 row-start-3 border-t border-app-border bg-app-surface/95 backdrop-blur-md pb-safe shrink-0 z-30"
+>
+  <div class="grid grid-cols-3 h-16 px-2">
+    <button
+      type="button"
+      data-mobile-nav-btn="content"
+      aria-current="page"
+      class="mobile-nav-btn flex flex-col items-center justify-center gap-1 rounded-xl text-app-accent transition-colors"
+    >
+      <span class="mobile-nav-pill px-4 py-1 rounded-full bg-app-accent/15 flex items-center justify-center transition-colors">
+        <FileText class="w-5 h-5" />
+      </span>
+      <span class="text-[11px] font-semibold leading-none">Contenido</span>
+    </button>
+
+    <button
+      type="button"
+      data-mobile-nav-btn="design"
+      class="mobile-nav-btn flex flex-col items-center justify-center gap-1 rounded-xl text-app-muted transition-colors"
+    >
+      <span class="mobile-nav-pill px-4 py-1 rounded-full bg-transparent flex items-center justify-center transition-colors">
+        <Palette class="w-5 h-5" />
+      </span>
+      <span class="text-[11px] font-medium leading-none">Diseño</span>
+    </button>
+
+    <button
+      type="button"
+      data-mobile-nav-btn="preview"
+      class="mobile-nav-btn flex flex-col items-center justify-center gap-1 rounded-xl text-app-muted transition-colors"
+    >
+      <span class="mobile-nav-pill px-4 py-1 rounded-full bg-transparent flex items-center justify-center transition-colors">
+        <QrCode class="w-5 h-5" />
+      </span>
+      <span class="text-[11px] font-medium leading-none">Vista previa</span>
+    </button>
+  </div>
+</nav>

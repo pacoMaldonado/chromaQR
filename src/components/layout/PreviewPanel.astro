@@ -4,6 +4,7 @@ import {
   ShieldCheck,
   ShieldAlert,
   Copy,
+  Share2,
   Download,
   BookmarkPlus,
   Sparkles,
@@ -13,7 +14,10 @@ import {
 import Button from '../ui/Button.astro';
 ---
 
-<aside class="w-[40%] h-full bg-app-surface/70 flex flex-col justify-between p-5 overflow-hidden transition-colors">
+<aside
+  id="preview-panel-aside"
+  class="w-full h-full min-h-0 col-start-1 row-start-2 lg:col-start-2 lg:row-start-1 lg:row-span-2 bg-app-surface/70 flex flex-col justify-between gap-3 p-3.5 sm:p-5 overflow-y-auto lg:overflow-hidden transition-colors"
+>
   <!-- Top Bar: Local Presets / Templates Selector -->
   <div class="rounded-xl bg-app-surface border border-app-border p-3 space-y-2.5 shrink-0 relative z-20">
     <div class="flex items-center justify-between">
@@ -151,7 +155,7 @@ import Button from '../ui/Button.astro';
 
   <!-- Bottom Bar: Primary Export & Clipboard Actions -->
   <div class="rounded-xl bg-app-surface border border-app-border p-3.5 space-y-2.5 shrink-0">
-    <!-- Quick Action: Copy Image to Native Clipboard -->
+    <!-- Quick Action: Copy Image to Native Clipboard (Desktop) -->
     <Button
       id="copy-clipboard-btn"
       variant="primary"
@@ -161,9 +165,22 @@ import Button from '../ui/Button.astro';
     >
       <Copy class="w-4 h-4" />
       <span>Copiar imagen al portapapeles</span>
-      <kbd class="ml-auto px-1.5 py-0.5 rounded bg-indigo-950/70 border border-indigo-400/30 font-mono text-[10px] text-indigo-200">
+      <kbd class="ml-auto hidden sm:inline px-1.5 py-0.5 rounded bg-indigo-950/70 border border-indigo-400/30 font-mono text-[10px] text-indigo-200">
         Ctrl+C
       </kbd>
+    </Button>
+
+    <!-- Quick Action: Native Share Sheet (Android / iOS: WhatsApp, Bluetooth, Mensajes...) -->
+    <Button
+      id="share-qr-btn"
+      variant="primary"
+      size="lg"
+      fullWidth={true}
+      class="hidden min-h-[44px]"
+      title="Compartir imagen QR (WhatsApp, Mensajes, Bluetooth...)"
+    >
+      <Share2 class="w-4 h-4" />
+      <span>Compartir código QR</span>
     </Button>
 
     <!-- Direct File Download / Export Buttons (PNG, SVG, WEBP, PDF) -->

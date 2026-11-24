@@ -1,6 +1,5 @@
 ---
 import { Code2, AlertCircle, CheckCircle2 } from 'lucide-astro';
-import AppHeader from './AppHeader.astro';
 import PayloadTabs from '../payloads/PayloadTabs.astro';
 import UrlForm from '../payloads/UrlForm.astro';
 import TextForm from '../payloads/TextForm.astro';
@@ -18,17 +17,19 @@ import LogoAccordion from '../design/LogoAccordion.astro';
 import TechAccordion from '../design/TechAccordion.astro';
 ---
 
-<section class="w-[60%] h-full border-r border-app-border bg-app-bg flex flex-col overflow-hidden">
-  <!-- App Brand Header -->
-  <AppHeader />
-
+<section
+  id="config-panel-section"
+  class="w-full h-full min-h-0 col-start-1 row-start-2 lg:border-r border-app-border bg-app-bg flex flex-col overflow-hidden"
+>
   <!-- Top Bar: QR Payload Type Selector Tabs -->
-  <PayloadTabs />
+  <div id="payload-tabs-bar" class="shrink-0">
+    <PayloadTabs />
+  </div>
 
   <!-- Scrollable Interior Workspace (No Global Window Scroll) -->
-  <div class="flex-1 overflow-y-auto px-5 py-4 space-y-5">
+  <div class="flex-1 overflow-y-auto px-3.5 sm:px-5 py-4 space-y-5">
     <!-- Dynamic Payload Data Card -->
-    <div class="rounded-xl bg-app-surface border border-app-border p-4 space-y-4 shadow-sm">
+    <div id="mobile-section-content" class="rounded-xl bg-app-surface border border-app-border p-3.5 sm:p-4 space-y-4 shadow-sm">
       <div class="flex items-center justify-between border-b border-app-border pb-2.5">
         <div>
           <h2 id="payload-section-title" class="text-xs font-semibold uppercase tracking-wider text-app-text">
@@ -95,7 +96,7 @@ import TechAccordion from '../design/TechAccordion.astro';
     </div>
 
     <!-- Design Customization Accordions Header -->
-    <div class="space-y-2.5">
+    <div id="mobile-section-design" class="space-y-2.5">
       <div class="flex items-center justify-between px-0.5">
         <h3 class="text-[11px] font-semibold uppercase tracking-wider text-app-muted">
           Personalización Estética y Óptica

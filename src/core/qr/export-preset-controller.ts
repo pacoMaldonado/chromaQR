@@ -1,4 +1,4 @@
-import { invoke } from '@tauri-apps/api/core';
+import { openUrl } from '@tauri-apps/plugin-opener';
 import type { QRPreset } from '../../types/qr';
 import {
   addCustomPreset,
@@ -7,10 +7,16 @@ import {
 } from '../presets/preset-manager';
 import { appStore } from '../store/app-store';
 import { showToast } from '../ui/toast';
-import { copyQrToClipboard, exportQrToFile } from './exporter';
+import {
+  copyQrToClipboard,
+  exportQrToFile,
+  isMobilePlatform,
+  shareQrImage,
+} from './exporter';
 
 const THEME_STORAGE_KEY = 'chromaqr_ui_theme';
 const GITHUB_REPO_URL = 'https://github.com/pacoMaldonado/chromaQR';
+const GITHUB_RELEASE_URL = `${GITHUB_REPO_URL}/releases/tag/v${__APP_VERSION__}`;
 
 function isTauriRuntime(): boolean {
   return typeof window !== 'undefined' && '__TAURI_INTERNALS__' in window;
@@ -22,6 +28,7 @@ function initThemeAndHeaderActions(): void {
   const moonIcon = document.getElementById('theme-icon-moon');
   const themeLabel = document.getElementById('theme-toggle-label');
   const githubBtn = document.getElementById('github-repo-btn');
+  const versionBtn = document.getElementById('app-version-btn');
 
   const applyTheme = (theme: 'dark' | 'light', notify: boolean = false) => {
     const root = document.documentElement;
@@ -67,17 +74,28 @@ function initThemeAndHeaderActions(): void {
     applyTheme(isCurrentlyLight ? 'dark' : 'light', true);
   });
 
-  githubBtn?.addEventListener('click', async () => {
+  const openExternalUrl = async (url: string, toastMsg: string) => {
     if (isTauriRuntime()) {
       try {
-        await invoke('open_repo_url');
-        showToast('Abriendo repositorio en el navegador...', 'info', 2000);
+        await openUrl(url);
+        showToast(toastMsg, 'info', 2000);
         return;
       } catch (err) {
         console.warn('Fallback to window.open:', err);
       }
     }
-    window.open(GITHUB_REPO_URL, '_blank', 'noopener,noreferrer');
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
+
+  githubBtn?.addEventListener('click', () => {
+    void openExternalUrl(GITHUB_REPO_URL, 'Abriendo repositorio en el navegador...');
+  });
+
+  versionBtn?.addEventListener('click', () => {
+    void openExternalUrl(
+      GITHUB_RELEASE_URL,
+      `ChromaQR v${__APP_VERSION__} — Abriendo notas de versión...`
+    );
   });
 }
 
@@ -246,16 +264,28 @@ export async function initExportAndPresetController(): Promise<void> {
     showToast(`Preset "${target.name}" eliminado`, 'info');
   });
 
-  // Bind Clipboard & Export Buttons
+  // Bind Clipboard, Mobile Share & Export Buttons
   const copyBtn = document.getElementById('copy-clipboard-btn');
+  const shareBtn = document.getElementById('share-qr-btn');
   const pngBtn = document.getElementById('export-png-btn');
   const svgBtn = document.getElementById('export-svg-btn');
   const webpBtn = document.getElementById('export-webp-btn');
   const pdfBtn = document.getElementById('export-pdf-btn');
 
+  // On Android/iOS, swap primary action from Clipboard to Native Share Sheet
+  if (isMobilePlatform()) {
+    copyBtn?.classList.add('hidden');
+    shareBtn?.classList.remove('hidden');
+  }
+
   copyBtn?.addEventListener('click', async () => {
     const { computedPayload, style } = appStore.getState();
     await copyQrToClipboard(computedPayload.raw, style);
+  });
+
+  shareBtn?.addEventListener('click', async () => {
+    const { activeTab, computedPayload, style } = appStore.getState();
+    await shareQrImage(activeTab, computedPayload.raw, style);
   });
 
   pngBtn?.addEventListener('click', async () => {

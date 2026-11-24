@@ -1,6 +1,6 @@
 # ChromaQR — Pro QR Studio
 
-> **Aplicación de escritorio multiplataforma (Linux, macOS, Windows) de alto rendimiento y bajo consumo de recursos para la generación, personalización estética avanzada y validación óptica de códigos QR.**
+> **Aplicación multiplataforma (Linux, macOS, Windows y Android) de alto rendimiento y bajo consumo de recursos para la generación, personalización estética avanzada y validación óptica de códigos QR.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-6366F1.svg)](./LICENSE)
 [![Tauri v2](https://img.shields.io/badge/Tauri-v2-10B981.svg)](https://v2.tauri.app/)
@@ -62,6 +62,12 @@ Descarga el instalador para tu sistema desde la sección **[Releases](https://gi
 
 ### 🪟 Windows (`.msi` / `.exe`)
 - Ejecuta el instalador `.exe` o `.msi`. Si aparece la ventana de *Windows SmartScreen*, haz clic en **"Más información"** y luego en **"Ejecutar de todas formas"**.
+
+### 🤖 Android (`.apk` / `.aab`)
+- **Instalación directa (`.apk`):** Descarga `ChromaQR_*_android_universal.apk` en tu teléfono, ábrelo desde tu gestor de archivos y autoriza **"Instalar apps desconocidas"** si Android lo solicita.
+- **Google Play (`.aab`):** Cada release también incluye el Android App Bundle (`ChromaQR_*_android_universal.aab`) firmado y listo para distribución en Google Play Console.
+- En Android la interfaz se adapta automáticamente a navegación con pestañas inferiores (**Contenido / Diseño / Vista previa**) e integra el menú nativo **Compartir código QR** (WhatsApp, Mensajes, Bluetooth, etc.).
+- Para compilar o firmar Android localmente, consulta [docs/ANDROID_SETUP.md](./docs/ANDROID_SETUP.md).
 
 ---
 

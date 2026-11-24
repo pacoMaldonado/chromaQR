@@ -11,6 +11,22 @@ y este proyecto se adhiere a [Semantic Versioning (SemVer)](https://semver.org/l
 
 ---
 
+## [0.1.0] - 2026-11-24
+
+### Added (Nuevas Funcionalidades)
+- **Soporte Oficial para Android (`.apk` universal y `.aab` para Google Play):** Proyecto Android inicializado en `src-tauri/gen/android` con iconos adaptativos, `compileSdk`/`targetSdk` 36, firma criptográfica para producción y job automatizado en GitHub Actions.
+- **Interfaz Móvil Nativa con Pestañas Inferiores (`MobileBottomNav.astro`, `index.astro`, `global.css`):** Navegación estilo app móvil en pantallas `< 1024px` (**Contenido / Diseño / Vista previa**) con soporte de `100dvh`, *safe-areas* (notch y barra de gestos) y ergonomía táctil, manteniendo intacto el *split-screen* 60/40 en escritorio.
+- **Compartir Código QR Nativo en Android (`tauri-plugin-vnidrop-share`, `exporter.ts`):** Reemplaza el botón de portapapeles en dispositivos móviles por **"Compartir código QR"** usando el Share Sheet nativo (WhatsApp, Mensajes, Bluetooth, correo, etc.), y añade respaldo automático al Share Sheet si el diálogo de guardado falla en alguna ROM.
+- **Indicador de Versión Visible en el Encabezado (`AppHeader.astro`, `astro.config.mjs`):** Badge interactivo `v0.1.0` inyectado en tiempo de compilación desde `package.json` que abre las notas de la versión correspondiente en GitHub.
+- **Guía de Entorno y Firma Android (`docs/ANDROID_SETUP.md`):** Documentación paso a paso de JDK 17, SDK/NDK, targets de Rust, generación/respaldo de keystore y configuración de GitHub Secrets.
+
+### Security & Architecture (Seguridad y Arquitectura)
+- **Capabilities Zero-Trust por Plataforma (`desktop.json`, `mobile.json`):** Permisos mínimos separados explícitamente para escritorio y móvil.
+- **Migración a `tauri-plugin-opener`:** Eliminado el comando `open_repo_url` con `std::process::Command` y reemplazado por `opener:allow-open-url` restringido exclusivamente a `https://github.com/pacoMaldonado/chromaQR*`.
+- **Candado de Sincronización Tag ↔ Versión (`scripts/release.mjs --check`, `release.yml`):** El pipeline de CI/CD valida automáticamente que el tag de Git coincida con `package.json`, `Cargo.toml` y `tauri.conf.json` antes de crear el release.
+
+---
+
 ## [0.0.6] - 2026-11-16
 
 ### Added (Nuevas Funcionalidades)

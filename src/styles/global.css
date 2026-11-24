@@ -89,14 +89,55 @@ body {
   margin: 0;
   padding: 0;
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
   overflow: hidden;
   background-color: rgb(var(--bg-primary));
   color: rgb(var(--text-primary));
   font-family: 'Inter', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
   transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+/* Safe-area helpers for Android/iOS status bar & gesture navigation */
+.pt-safe {
+  padding-top: max(0.625rem, env(safe-area-inset-top));
+}
+
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Mobile App Tab Navigation (< lg / 1024px) — Desktop split-screen stays untouched */
+@media (max-width: 1023px) {
+  main[data-mobile-tab="content"] #mobile-section-design,
+  main[data-mobile-tab="content"] #preview-panel-aside {
+    display: none;
+  }
+
+  main[data-mobile-tab="design"] #payload-tabs-bar,
+  main[data-mobile-tab="design"] #mobile-section-content,
+  main[data-mobile-tab="design"] #preview-panel-aside {
+    display: none;
+  }
+
+  main[data-mobile-tab="preview"] #config-panel-section {
+    display: none;
+  }
+
+  /* Prevent mobile WebView auto-zoom on form controls */
+  input[type="text"],
+  input[type="url"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="number"],
+  input[type="password"],
+  input[type="datetime-local"],
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
 }
 
 /* Fix WebKitGTK (Linux Fedora/Ubuntu) native <select> white button bug */
