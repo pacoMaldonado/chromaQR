@@ -205,7 +205,7 @@ jobs:
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
         run: |
           if [ -n "$ANDROID_KEY_BASE64" ]; then
-            echo "$ANDROID_KEY_BASE64" | base64 --decode > src-tauri/gen/android/chromaqr-release.jks
+            printf '%s' "$ANDROID_KEY_BASE64" | tr -d '[:space:]' | base64 --decode > src-tauri/gen/android/chromaqr-release.jks
             cat <<EOF > src-tauri/gen/android/keystore.properties
           password=${ANDROID_KEY_PASSWORD}
           keyAlias=${ANDROID_KEY_ALIAS}
